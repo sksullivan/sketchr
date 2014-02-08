@@ -64,12 +64,15 @@ function touchDown(event) {
 		slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
 		$('#info').text(Math.atan(slope));
 		if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
+			$('#info').text(Math.atan(slope)+" Should be flat line");
 			roadPos1.y = (roadPos2.y+roadPos1.y)/2;
 			roadPos2.y = (roadPos2.y+roadPos1.y)/2;
 		} else if (Math.atan(slope)<1.05 && Math.atan(slope)>1.05) {
+			$('#info').text(Math.atan(slope)+" Should be diagonal line");
 			ydiff = roadPos2.y-roadPos1.y;
 			roadPos2.x = roadPos1.x+ydiff;
 		} else {
+			$('#info').text(Math.atan(slope)+" Should be vertical line");
 			roadPos1.x = (roadPos2.x+roadPos1.x)/2;
 			roadPos2.x = (roadPos2.x+roadPos1.x)/2;
 		}
