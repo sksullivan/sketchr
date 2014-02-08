@@ -105,7 +105,7 @@ function touchDown(event) {
 		allFalse();
 		roadMode = true;
 	} else if (isInTouch(event,carImg)) {
-		if (carMode && event.y < 150) {
+		if (carMode && event.targetTouches[0].pageY < 150) {
 			$('#info').text("rotating car");
 			carAngle += Math.PI/4;
 			drawStatics();
