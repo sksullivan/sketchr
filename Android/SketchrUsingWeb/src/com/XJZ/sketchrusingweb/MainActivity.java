@@ -35,6 +35,13 @@ public class MainActivity extends Activity implements TabListener {
         tab.setText("Camera");
         tab.setTabListener(this);
         bar.addTab(tab);
+        
+        
+        tab = bar.newTab();
+        tab.setText("Voice Recorder");
+        tab.setTabListener(this);
+        bar.addTab(tab);
+        
     }
 
     @Override
