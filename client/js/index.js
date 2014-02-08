@@ -61,8 +61,8 @@ $(document).ready(function () {
 function mouseDown(event) {
 	$('#info').text("POW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if (roadMode) {
-		roadPos1.x = event.x;
-		roadPos1.y = event.y;
+		roadPos1.x = event.targetTouches[0].pageX;
+		roadPos1.y = event.targetTouches[0].pageY;
 		roadMode = false;
 		roadModeEnd = true;
 	}
@@ -91,11 +91,11 @@ function mouseDown(event) {
 		});
 	}
 	mouseIsDown = true;
-	console.log(event.x+","+event.y);
+	console.log(event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 function mouseMove (event) {
-	$('#info').text("MOVING "+event.x+","+event.y);
+	$('#info').text("MOVING "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if (draggedItem != null) {
 		if (draggedItem.shouldDragComplete) {
 
@@ -110,10 +110,10 @@ function mouseMove (event) {
 }
 
 function mouseUp (event) {
-	$('#info').text("UNPOW "+event.x+","+event.y);
+	$('#info').text("UNPOW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if(roadModeEnd) {
-		roadPos2.x = event.x;
-		roadPos2.y = event.y;
+		roadPos2.x = event.targetTouches[0].pageX;
+		roadPos2.y = event.targetTouches[0].pageY;
 		newItem = new Object();
 		newItem.isRoad = true;
 		newItem.pos1 = roadPos1;
