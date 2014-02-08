@@ -74,7 +74,7 @@ function touchDown(event) {
 		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
 		angle = Math.atan(slope);
 		if (Pos2.y > Pos1.y && Pos2.x > Pos1.x) {
-			angle = -angle;
+			//angle = -angle;
 		}
 		if (angle<.70) {
 			Pos1.y = (Pos2.y+Pos1.y)/2;
