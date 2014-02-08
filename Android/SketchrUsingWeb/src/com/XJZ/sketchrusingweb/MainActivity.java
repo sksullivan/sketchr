@@ -1,26 +1,49 @@
 package com.XJZ.sketchrusingweb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TabListener {
 
+	List<Fragment> fragList = new ArrayList<Fragment>();
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        WebView webview = new WebView(this);
+        ActionBar bar = getActionBar();
+        bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        
+        Tab tab = bar.newTab();
+        tab.setText("Draw");
+        tab.setTabListener(this);
+        bar.addTab(tab);
+        
+        tab = bar.newTab();
+        tab.setText("Camera");
+        tab.setTabListener(this);
+        bar.addTab(tab);
+        
+        /*WebView webview = new WebView(this);
         webview.setWebViewClient(new WebViewClient());
         WebSettings websettings = webview.getSettings();
         websettings.setJavaScriptEnabled(true);
         
         setContentView(webview);
         
-        webview.loadUrl("http://google.com");
+        webview.loadUrl("http://google.com"); */
     }
     
     //private 
@@ -31,6 +54,36 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+    
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    	
+    }
+    
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    	Fragment f = null;
+    	TabFragment tf = null;
+    	
+    	if (fragList.size() > tab.getPosition()) {
+    		fragList.get(tab.getPosition());
+    	}
+    	
+    	if (f == null) {
+    		tf = new TabFragment();
+    		Bundle data = new Bundle();
+    		data.putInt("idx", tab.getPosition());
+    		tf.setArguments(data);
+     	} else {
+     		tf = (TabFragment)f;
+     	}
+    	
+    	ft.replace(android.R.id.content, tf);
+    }
+    
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    	if (fragList.size() > tab.getPosition()) {
+    		ft.remove(fragList.get(tab.getPosition()));
+    	}
     }
     
 }
