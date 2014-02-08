@@ -60,12 +60,25 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	$('#info').text("POW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if (roadMode) {
+		$('#info').text("ROAD "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 		roadPos1.x = event.targetTouches[0].pageX;
 		roadPos1.y = event.targetTouches[0].pageY;
 		roadMode = false;
 		roadModeEnd = true;
+	}
+	if(roadModeEnd) {
+		$('#info').text("ROAD END"+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+		roadPos2.x = event.targetTouches[0].pageX;
+		roadPos2.y = event.targetTouches[0].pageY;
+		newItem = new Object();
+		newItem.isRoad = true;
+		newItem.pos1 = roadPos1;
+		newItem.pos2 = roadPos2;
+		items.push(newItem);
+		road = null;
+		roadModeEnd = false
+		drawItems();
 	}
 
 
@@ -112,21 +125,6 @@ function mouseMove (event) {
 
 function mouseUp (event) {
 	$('#info').text("UNPOW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-	if(roadModeEnd) {
-		roadPos2.x = event.targetTouches[0].pageX;
-		roadPos2.y = event.targetTouches[0].pageY;
-		newItem = new Object();
-		newItem.isRoad = true;
-		newItem.pos1 = roadPos1;
-		newItem.pos2 = roadPos2;
-		items.push(newItem);
-		road = null;
-		console.log(items);
-	}
-	roadModeEnd = false
-	console.log(roadPos1);
-	console.log(roadPos2);
-	drawItems();
 	console.log(items);
 
 	mouseIsDown = false;
