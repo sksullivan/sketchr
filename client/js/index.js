@@ -66,7 +66,6 @@ function touchDown(event) {
 		Pos1.x = event.targetTouches[0].pageX;
 		Pos1.y = event.targetTouches[0].pageY;
 	} else {
-		$('#info').text("set 2nd");
 		Pos2.x = event.targetTouches[0].pageX;
 		Pos2.y = event.targetTouches[0].pageY;
 
@@ -95,7 +94,7 @@ function touchDown(event) {
 		road.pos1 = Pos1;
 		road.pos2 = Pos2;
 		items.push(road);
-		// $('#info').text(road.pos1.x+", "+road.pos1.y+" - "+road.pos2.x+", "+road.pos2.y);
+		$('#info').text(road.pos1.x+", "+road.pos1.y+" - "+road.pos2.x+", "+road.pos2.y);
 		Pos1.x = 0;
 		Pos1.y = 0;
 		Pos2.x = 0;
