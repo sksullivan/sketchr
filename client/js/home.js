@@ -24,7 +24,7 @@ DrawItem.prototype.draw = function () {
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.rotate(this.heading/180*Math.PI);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
-	ctx.drawImage(this.image,this.x,this.y);
+	ctx.drawImage(this.image,this.x,this.y, this.size * this.image.width, this.size * this.image.height);
 	ctx.restore();
 }
 
@@ -33,7 +33,7 @@ DrawItem.prototype.contains = function (event) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
 	}
-	return event.y < this.y+this.height && event.y > this.y && event.x < this.x+this.width && event.x > this.x;
+	return event.y < this.y+this.size*this.height && event.y > this.y && event.x < this.x+this.size*this.width && event.x > this.x;
 }
 
 DrawItem.prototype.onMouseDown = function () {
@@ -104,7 +104,7 @@ Road.prototype.toString = function () {
 	return 'Road';
 }
 
-// CarGenrator Class
+// CarGenerator Class
 
 function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.x = x;
@@ -137,9 +137,9 @@ CarGenerator.prototype.onMouseDown = function () {
 	}
 }
 
-// UninvolvedCarGenrator Class
+// UninvolvedCarGenerator Class
 
-function UCarGenrator (x,y,heading,size,imageName,name,ctx,type) {
+function UCarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -159,9 +159,9 @@ function UCarGenrator (x,y,heading,size,imageName,name,ctx,type) {
 	this.type = type;
 }
 
-UCarGenrator.prototype = new DrawItem();
+UCarGenerator.prototype = new DrawItem();
 
-UCarGenrator.prototype.onMouseDown = function () {
+UCarGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "uCar") {
 		this.rotate(45);
 		redraw();
@@ -172,7 +172,7 @@ UCarGenrator.prototype.onMouseDown = function () {
 
 // Road Generator Class
 
-function RoadGenrator (x,y,heading,size,imageName,name,ctx,type) {
+function RoadGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -192,9 +192,9 @@ function RoadGenrator (x,y,heading,size,imageName,name,ctx,type) {
 	this.type = type;
 }
 
-RoadGenrator.prototype = new DrawItem();
+RoadGenerator.prototype = new DrawItem();
 
-RoadGenrator.prototype.onMouseDown = function () {
+RoadGenerator.prototype.onMouseDown = function () {
 	placeMode = "road";
 }
 
@@ -266,10 +266,9 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
-	carGenerator = new CarGenerator(0,0,0,100,"/assets/redcar.png","the car generator",ctx);
-	uCarGenerator = new UCarGenrator(220,0,0,100,"/assets/graycar.png","the uninvolved car generator",ctx);
-	roadGenerator = new RoadGenrator(440,0,0,100,"/assets/road.png","the road generator",ctx);
-	arrowGenerator = new NorthGenrator(600,0,0,100,"/assets/arrowU.png","the arrow generator",ctx);
+	carGenerator = new CarGenerator(1/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/redcar.png","the car generator",ctx);
+	uCarGenerator = new UCarGenerator(1/10*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/graycar.png","the uninvolved car generator",ctx);
+	roadGenerator = new RoadGenerator(19/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
@@ -291,11 +290,11 @@ function mouseDown (event) {
 	}
 	switch (placeMode) {
 		case "car":
-			car = new DrawItem(event.x-carGenerator.width/2,event.y-carGenerator.height/2,carGenerator.heading,100,"/assets/redcar.png","the car",this.ctx);
+			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","the car",this.ctx);
 			drawItemList.push(car);
 			break;
 		case "uCar":
-			uCar = new DrawItem(event.x-uCarGenerator.width/2,event.y-uCarGenerator.height/2,uCarGenerator.heading,100,"/assets/graycar.png","the car",this.ctx);
+			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","the car",this.ctx);
 			drawItemList.push(uCar);
 			break;
 		case "road":
@@ -339,10 +338,9 @@ function mouseDown (event) {
 }
 
 function redraw () {
-	ctx.clearRect(0,0,$(window).width(),$(window).height());
-	ctx.beginPath();
-	ctx.moveTo(0, 150);
-	ctx.lineTo($(window).width(), 150);
+	ctx.clearRect(0,0,cvs.width,cvs.height);
+	ctx.moveTo(0, cvs.width/2500*160);
+	ctx.lineTo(cvs.width, cvs.width/2500*160);
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#000000';
 	ctx.stroke();
