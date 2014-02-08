@@ -59,21 +59,24 @@ $(document).ready(function () {
 
 // Mouse Events
 
-function mouseDown(event) {
-	$('#info').text("DOWN "+event.x+","+event.y);
-}
-
-function mouseMove (event) {
-	$('#info').text("MOVING "+event.x+","+event.y);
-}
-
-function mouseUp (event) {
-	$('#info').text("UP "+event.x+","+event.y);
-}
-
 function touchDown(event) {
 	event.preventDefault();
 	$('#info').text("T-DOWN "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+	if (!roadMode) {
+		roadPos1.x = event.targetTouches[0].pageX;
+		roadPos1.y = event.targetTouches[0].pageY;
+		roadMode = true;
+	} else if (roadMode) {
+		roadPos2.x = event.targetTouches[0].pageX;
+		roadPos2.y = event.targetTouches[0].pageY;
+
+		road = new Object();
+		road.isRoad = true;
+		road.pos1 = roadPos1;
+		road.pos2 = roadPos2;
+		items.push(road);
+		roadMode = false;
+	}
 }
 
 function touchMove (event) {
