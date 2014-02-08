@@ -3,10 +3,15 @@
 var tag = "";
 var mouseIsDown = false;
 var draggedItem = null;
-var selectedItem = null;
+var road = null;
 var roadImg, carImg;
 var items = [];
 var ctx,diffx,diffy;
+var roadMode = false;
+var roadModeEnd = false;
+
+var roadPos1 = new Object();
+var roadPos2 = new Object();
 
 // Setup
 
@@ -25,12 +30,12 @@ $(document).ready(function () {
 	carImg = new Image();
 	carImg.src = "/assets/redcartop.png"
 	setPos(carImg,0,0);
-	carImg.shouldDrag = true;
+	carImg.shouldDragSimple = true;
 
 	roadImg = new Image();
 	roadImg.src = "/assets/road.png"
 	setPos(roadImg,300,0);
-	roadImg.shouldSelect = true;
+	roadImg.shouldDragComplete = true;
 
 	items.push(roadImg);
 	items.push(carImg);
@@ -46,29 +51,72 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	mouseIsDown = true;
-	if (selectedItem != null) {
-		selectedItem = null;
-		return;
+	if (roadMode) {
+		roadPos1.x = event.x;
+		roadPos1.y = event.y;
+		roadMode = false;
+		roadModeEnd = true;
 	}
-	items.forEach(function (item) {
-		if (isIn(event,item)) {
-			if (item.shouldDrag) {
-				startDragging(event,item);
-			} else {
-				startSelecting(event,item);
+
+
+	if (!mouseIsDown) {
+		items.forEach(function (item) {
+			if (isIn(event,item)) {
+				if (item.shouldDragSimple || item.shouldDragComplete) {
+					startDragging(event,item);
+				}
+				if (item.shouldDragComplete) {
+					roadMode = true;
+					road = item;
+					/*for (i=0;i<$(window).height()/draggedItem.height;i++) {
+						newItem = draggedItem.cloneNode(false);
+						newItem.cloned = true;
+						setPos(newItem,draggedItem.posx,draggedItem.posy+draggedItem.height*(i+1));
+						console.log(newItem);
+						items.push(newItem);
+					}
+					drawItems();
+					console.log(items);*/
+				}
 			}
-		}
-	});
+		});
+	}
+	mouseIsDown = true;
+	console.log(event.x+","+event.y);
 }
 
 function mouseMove (event) {
-	if (draggedItem != null || selectedItem != null) {
-		drag(event,draggedItem || selectedItem);
+	if (draggedItem != null) {
+		if (draggedItem.shouldDragComplete) {
+
+		}
+		drag(event,draggedItem);
+		/*items.forEach(function (item) {
+			if (item.cloned) {
+				drag(event,item);
+			}
+		});*/
 	}
 }
 
 function mouseUp (event) {
+	if(roadModeEnd) {
+		roadPos2.x = event.x;
+		roadPos2.y = event.y;
+		newItem = new Object();
+		newItem.isRoad = true;
+		newItem.pos1 = roadPos1;
+		newItem.pos2 = roadPos2;
+		items.push(newItem);
+		road = null;
+		console.log(items);
+	}
+	roadModeEnd = false
+	console.log(roadPos1);
+	console.log(roadPos2);
+	drawItems();
+	console.log(items);
+
 	mouseIsDown = false;
 	draggedItem = null;
 }
@@ -94,7 +142,13 @@ function drawStatics() {
 
 function drawItems() {
 	items.forEach(function (item) {
-		ctx.drawImage(item,item.posx,item.posy);
+		if (item.isRoad) {
+			ctx.moveTo(item.pos1.x, item.pos1.y);
+			ctx.lineTo(item.pos2.x, item.pos2.y);
+			ctx.stroke();
+		} else {
+			ctx.drawImage(item,item.posx,item.posy);
+		}
 	});
 }
 
@@ -125,12 +179,4 @@ function startDragging (event,item) {
 	items.push(item);
 	diffx = event.x - draggedItem.posx;
 	diffy = event.y - draggedItem.posy;
-}
-
-function startSelecting (event,item) {
-	selectedItem = item;
-	items.remove(items.indexOf(item));
-	items.push(item);
-	diffx = event.x - selectedItem.posx;
-	diffy = event.y - selectedItem.posy;
 }
