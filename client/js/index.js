@@ -63,6 +63,37 @@ function touchDown(event) {
 	} else if (roadMode) {
 		roadPos2.x = event.targetTouches[0].pageX;
 		roadPos2.y = event.targetTouches[0].pageY;
+	}
+
+	road = new Object();
+	road.isRoad = true;
+	slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
+	$('#info').text(Math.atan(slope));
+	if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
+		roadPos1.y = (roadPos2.y+roadPos1.y)/2;
+		roadPos2.y = roadPos1.y;
+		$('#info').text(Math.atan(slope));
+	} else if (Math.atan(slope)<1.05 && Math.atan(slope)>-1.05) {
+		if (roadPos2.x > roadPos1.x) {
+			ydiff = roadPos2.y-roadPos1.y;
+			roadPos2.x = roadPos1.x-ydiff;
+		} else {
+			ydiff = roadPos2.y-roadPos1.y;
+			roadPos2.x = roadPos1.x+ydiff;
+		}
+		$('#info').text(Math.atan(slope));
+	} else {
+		roadPos1.x = (roadPos2.x+roadPos1.x)/2;
+		roadPos2.x = roadPos1.x;
+		$('#info').text(Math.atan(slope));
+	}
+	road.pos1 = roadPos1;
+	road.pos2 = roadPos2;
+	items.push(road);
+	roadMode = false;
+	drawItems();
+}
+
 function mouseDown(event) {
 	Pos1.x = event.x;
 	Pos1.y = event.y;
@@ -73,34 +104,6 @@ function mouseDown(event) {
 		$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
 	}
 
-		road = new Object();
-		road.isRoad = true;
-		slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
-		$('#info').text(Math.atan(slope));
-		if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
-			roadPos1.y = (roadPos2.y+roadPos1.y)/2;
-			roadPos2.y = roadPos1.y;
-			$('#info').text(Math.atan(slope));
-		} else if (Math.atan(slope)<1.05 && Math.atan(slope)>-1.05) {
-			if (roadPos2.x > roadPos1.x) {
-				ydiff = roadPos2.y-roadPos1.y;
-				roadPos2.x = roadPos1.x-ydiff;
-			} else {
-				ydiff = roadPos2.y-roadPos1.y;
-				roadPos2.x = roadPos1.x+ydiff;
-			}
-			$('#info').text(Math.atan(slope)+);
-		} else {
-			roadPos1.x = (roadPos2.x+roadPos1.x)/2;
-			roadPos2.x = roadPos1.x;
-			$('#info').text(Math.atan(slope));
-		}
-		road.pos1 = roadPos1;
-		road.pos2 = roadPos2;
-		items.push(road);
-		roadMode = false;
-		drawItems();
-	}
 	if (isIn(event,carImg)) {
 		allFalse();
 		carMode = true;
