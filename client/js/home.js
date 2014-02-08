@@ -53,6 +53,17 @@ DrawItem.prototype.move = function (x,y) {
 	this.y += y;
 }
 
+DrawItem.prototype.displayMenu = function () {
+	ctx.translate(0,0);
+	context.beginPath();
+	context.rect(188, 50, 200, 100);
+	context.fillStyle = 'yellow';
+	context.fill();
+	context.lineWidth = 7;
+	context.strokeStyle = 'black';
+	context.stroke();
+}
+
 // Road Class
 
 function Road (x,y,x2,y2,size,name,ctx) {
