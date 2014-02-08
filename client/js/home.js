@@ -300,7 +300,7 @@ function mouseDrag (event) {
 	}
 }
 
-function mouseDown (event) {
+/*function mouseDown (event) {
 	event.preventDefault();
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
@@ -355,7 +355,7 @@ function mouseDown (event) {
 			break;
 	}
 	redraw();
-}
+}*/
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
