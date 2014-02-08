@@ -63,10 +63,10 @@ function touchDown(event) {
 		road = new Object();
 		road.isRoad = true;
 		slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
-		if (slope < .57) {
+		if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
 			roadPos1.y = (roadPos2.y+roadPos1.y)/2;
 			roadPos2.y = (roadPos2.y+roadPos1.y)/2;
-		} else if (slope < 1.73) {
+		} else if (Math.atan(slope)<1.05 && Math.atan(slope)>1.05) {
 			ydiff = roadPos2.y-roadPos1.y;
 			roadPos2.x = roadPos1.x+ydiff;
 		} else {
