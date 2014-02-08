@@ -278,11 +278,23 @@ $(document).ready(function () {
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
+	canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
 
-function mouseDown (event) {
+function mouseDrag (event) {
+	event.preventDefault();
+	for (i=0;i<drawItemList.length;i++) {
+		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
+			drawItemList[i].x = event.targetTouches[0].pageX;
+			drawItemList[i].y = event.targetTouches[0].pageY;
+			return;
+		}
+	}
+}
+
+/*function mouseDown (event) {
 	event.preventDefault();
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
@@ -310,16 +322,16 @@ function mouseDown (event) {
 			y1 = tempRoad.y;
 			slope = (y2-y1)/(x2-x1);
 			angle = -Math.atan(slope)/Math.PI*180;
-			if (angle > 55) {
+			if (angle > 60) {
 				x1 = (x2+x1)/2;
 				x2 = x1;
-			} else if (angle > 35) {
+			} else if (angle > 30) {
 				ydiff = y2-y1;
 				x2 = x1-ydiff;
-			} else if (angle > -35) {
+			} else if (angle > -30) {
 				y1 = (y2+y1)/2;
 				y2 = y1;
-			} else if (angle > -55) {
+			} else if (angle > -60) {
 				ydiff = y2-y1;
 				x2 = x1+ydiff;
 			} else { 
@@ -337,7 +349,7 @@ function mouseDown (event) {
 			break;
 	}
 	redraw();
-}
+}*/
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
