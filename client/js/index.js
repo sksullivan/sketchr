@@ -1,10 +1,11 @@
 // Variables
 
-var roadImg, carImg, cancelImg;
+var roadImg, carImg, cancelImg, northImg, arrowImg;
 var items = [];
 var ctx,diffx,diffy;
 var roadMode = false;
 var carMode = false;
+var northMode = false;
 
 carAngle = 0;
 
@@ -44,6 +45,10 @@ $(document).ready(function () {
 	cancelImg.src = "/assets/cancel.png";
 	setPos(cancelImg,600,-10);
 
+	arrowImg = new Image();
+	arrowImg.src = "/assets/arrowU.png";
+	setPos(arrowImg,800,0);
+
 	roadImg.onload = function () {
 		ctx.drawImage(roadImg,roadImg.posx,roadImg.posy);
 	}
@@ -52,6 +57,9 @@ $(document).ready(function () {
 	}
 	cancelImg.onload = function () {
 		ctx.drawImage(cancelImg,cancelImg.posx,cancelImg.posy);
+	}
+	arrowImg.onload = function () {
+		ctx.drawImage(arrowImg,arrowImg.posx,arrowImg.posy);
 	}
 
 	drawStatics();
@@ -163,6 +171,18 @@ function mouseDown(event) {
 			carMode = true;
 			tempCar.carAngle = carAngle;
 			$(this).css('cursor', 'url(/assets/carcursor.png), auto');
+		}
+	}
+
+	if (isIn(event,arrowImg)) {
+		if (northMode && event.y < 150) {
+			northIndex = (northIndex+1)%4;
+			drawStatics();
+		} else {
+			allFalse();
+			northMode = true;
+			arrow.northindex = northIndex;
+			//$(this).css('cursor', 'url(/assets/carcursor.png), auto');
 		}
 	}
 
