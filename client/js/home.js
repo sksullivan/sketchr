@@ -287,16 +287,6 @@ function mouseDown (event) {
 	redraw();
 }
 
-function mouseUp (event) {
-	/*drawItemList.forEach(function (drawItem) {
-		if (isIn(event,drawItem)) {
-			drawItem.rotate(45);
-		}
-	});*/
-}
-
-
-
 function redraw () {
 	ctx.clearRect(0,0,$(window).width(),$(window).height());
 	ctx.moveTo(0, 150);
@@ -307,9 +297,4 @@ function redraw () {
 	drawItemList.forEach(function (drawItem) {
 		drawItem.draw();
 	});
-
-	/*setTimeout(function () {
-		car.rotate(45);
-		redraw();
-	}, 1000);*/
 }
