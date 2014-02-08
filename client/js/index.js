@@ -106,14 +106,17 @@ function touchDown(event) {
 		roadMode = true;
 	} else if (isInTouch(event,carImg)) {
 		if (carMode && event.y < 150) {
+			$('#info').text("rotating car");
 			carAngle += Math.PI/4;
 			drawStatics();
 		} else {
+			$('#info').text("turning carmode on");
 			allFalse();
 			carMode = true;
 			tempCar.carAngle = carAngle;
 		}
 	} else if (carMode && event.targetTouches[0].pageY > 150) {
+		$('#info').text("time for a new car");
 		tempCar = new Image();
 		tempCar.src = "/assets/redcartop.png";
 		tempCar.isCar = true;
