@@ -60,9 +60,9 @@ $(document).ready(function () {
 function touchDown(event) {
 	event.preventDefault();
 	//$('#info').text(roadMode ? "YES" : "NO");
-	if (isIn(event,roadImg)) {
+	if (isInTouch(event,roadImg)) {
 		roadMode = true;
-	} else if (isIn(event,carImg)) {
+	} else if (isInTouch(event,carImg)) {
 
 	}
 
@@ -183,12 +183,11 @@ function mouseUp (event) {
 // Helper Methods
 
 function isIn (event,element) {
-	if (event.x != 0) {
-		$('#info').text(event.x);
-		return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
-	} else {
-		return event.targetTouches[0].pageX < element.posx+element.width && event.targetTouches[0].pageX > element.posx && event.targetTouches[0].pageY < element.posy+element.height && event.targetTouches[0].pageY > element.posy;
-	}
+	return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
+}
+
+function isInTouch (event,element) {
+	return event.targetTouches[0].pageX < element.posx+element.width && event.targetTouches[0].pageX > element.posx && event.targetTouches[0].pageY < element.posy+element.height && event.targetTouches[0].pageY > element.posy;
 }
 
 function setPos (element,x,y) {
