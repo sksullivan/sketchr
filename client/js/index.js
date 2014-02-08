@@ -51,7 +51,6 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
-	$('#info').text("T-DOWN "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if (!roadMode) {
 		roadPos1.x = event.targetTouches[0].pageX;
 		roadPos1.y = event.targetTouches[0].pageY;
@@ -63,6 +62,7 @@ function touchDown(event) {
 		road = new Object();
 		road.isRoad = true;
 		slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
+		$('#info').text(Math.atan(slope));
 		if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
 			roadPos1.y = (roadPos2.y+roadPos1.y)/2;
 			roadPos2.y = (roadPos2.y+roadPos1.y)/2;
