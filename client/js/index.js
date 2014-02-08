@@ -1,17 +1,12 @@
 // Variables
 
-var tag = "";
-var mouseIsDown = false;
-var draggedItem = null;
-var road = null;
-var roadImg, carImg;
+var roadImg, carImg, cancelImg;
 var items = [];
 var ctx,diffx,diffy;
 var roadMode = false;
-var roadModeEnd = false;
 
-var roadPos1 = new Object();
-var roadPos2 = new Object();
+var Pos1 = new Object();
+var Pos2 = new Object();
 
 // Setup
 
@@ -28,17 +23,20 @@ $(document).ready(function () {
 
 	// Load items
 	carImg = new Image();
-	carImg.src = "/assets/redcartop.png"
-	setPos(carImg,0,0);
-	carImg.shouldDragSimple = true;
+	carImg.src = "/assets/redcartop.png";
+	setPos(carImg,0,10);
 
 	roadImg = new Image();
-	roadImg.src = "/assets/road.png"
-	setPos(roadImg,300,0);
-	roadImg.shouldDragComplete = true;
+	roadImg.src = "/assets/road.png";
+	setPos(roadImg,300,10);
+
+	cancelImg = new Image();
+	cancelImg.src = "/assets/cancel.png";
+	setPos(cancelImg,600,-10);
 
 	items.push(roadImg);
 	items.push(carImg);
+	items.push(cancelImg);
 	
 	drawStatics();
 	items.forEach(function (item) {
@@ -52,82 +50,52 @@ $(document).ready(function () {
 
 function mouseDown(event) {
 	if (roadMode) {
-		roadPos1.x = event.x;
-		roadPos1.y = event.y;
+		Pos1.x = event.x;
+		Pos1.y = event.y;
+	}
+
+	if (isIn(event,carImg)) {
+		$(this).css('cursor', 'url(/assets/redcartop.png), auto');
+	}
+
+	if (isIn(event,roadImg)) {
+		roadMode = true;
+		$(this).css('cursor', 'url(/assets/road.png), auto');
+	}
+
+	if (isIn(event,cancelImg)) {
 		roadMode = false;
-		roadModeEnd = true;
+		$(this).css('cursor', 'url(/assets/cancel.png), auto');
 	}
 
-
-	if (!mouseIsDown) {
-		items.forEach(function (item) {
-			if (isIn(event,item)) {
-				if (item.shouldDragSimple || item.shouldDragComplete) {
-					startDragging(event,item);
-				}
-				if (item.shouldDragComplete) {
-					roadMode = true;
-					road = item;
-					/*for (i=0;i<$(window).height()/draggedItem.height;i++) {
-						newItem = draggedItem.cloneNode(false);
-						newItem.cloned = true;
-						setPos(newItem,draggedItem.posx,draggedItem.posy+draggedItem.height*(i+1));
-						console.log(newItem);
-						items.push(newItem);
-					}
-					drawItems();
-					console.log(items);*/
-				}
-			}
-		});
-	}
-	mouseIsDown = true;
-	console.log(event.x+","+event.y);
+	console.log(event.x+", "+event.y);
 }
 
 function mouseMove (event) {
-	if (draggedItem != null) {
-		if (draggedItem.shouldDragComplete) {
-
-		}
-		drag(event,draggedItem);
-		/*items.forEach(function (item) {
-			if (item.cloned) {
-				drag(event,item);
-			}
-		});*/
-	}
+	// todo?
 }
 
 function mouseUp (event) {
-	if(roadModeEnd) {
-		roadPos2.x = event.x;
-		roadPos2.y = event.y;
+	if(roadMode) {
+		Pos2.x = event.x;
+		Pos2.y = event.y;
 		newItem = new Object();
 		newItem.isRoad = true;
-		newItem.pos1 = roadPos1;
-		newItem.pos2 = roadPos2;
+		newItem.pos1 = Pos1;
+		newItem.pos2 = Pos2;
 		items.push(newItem);
-		road = null;
 		console.log(items);
+		drawItems();
 	}
-	roadModeEnd = false
-	console.log(roadPos1);
-	console.log(roadPos2);
-	drawItems();
+	console.log(Pos1);
+	console.log(Pos2);
 	console.log(items);
-
-	mouseIsDown = false;
-	draggedItem = null;
 }
 
 // Helper Methods
 
 function isIn (event,element) {
-	if (event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy) {
-		return true;
-	}
-	return false;
+	return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
 }
 
 function setPos (element,x,y) {
@@ -165,25 +133,25 @@ Array.prototype.remove = function (from, to) { // Remove element code snippet by
   return this.push.apply(this, rest);
 };
 
-function startDragging (event,item) {
-	draggedItem = item;
-	items.remove(items.indexOf(item));
-	items.push(item);
-	diffx = event.x - draggedItem.posx;
-	diffy = event.y - draggedItem.posy;
-}
+// function startDragging (event,item) {
+// 	draggedItem = item;
+// 	items.remove(items.indexOf(item));
+// 	items.push(item);
+// 	diffx = event.x - draggedItem.posx;
+// 	diffy = event.y - draggedItem.posy;
+// }
 
-function drag (event,selected) {
-	setPos(selected,event.x-diffx,event.y-diffy);
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawStatics();
-	drawItems();
-}
+// function drag (event,selected) {
+// 	setPos(selected,event.x-diffx,event.y-diffy);
+// 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+// 	drawStatics();
+// 	drawItems();
+// }
 
-function startDragging (event,item) {
-	draggedItem = item;
-	items.remove(items.indexOf(item));
-	items.push(item);
-	diffx = event.x - draggedItem.posx;
-	diffy = event.y - draggedItem.posy;
-}
+// function startDragging (event,item) {
+// 	draggedItem = item;
+// 	items.remove(items.indexOf(item));
+// 	items.push(item);
+// 	diffx = event.x - draggedItem.posx;
+// 	diffy = event.y - draggedItem.posy;
+// }
