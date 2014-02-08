@@ -59,10 +59,13 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
-	$('#info').text(roadMode ? "YES" : "NO");
+	//$('#info').text(roadMode ? "YES" : "NO");
 	if (isIn(event,roadImg)) {
 		roadMode = true;
+	} else if (isIn(event,carImg)) {
+
 	}
+
 	if (roadMode) {
 		if (Pos1.x == 0 && Pos1.y == 0) {
 			Pos1.x = event.targetTouches[0].pageX;
