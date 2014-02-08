@@ -204,7 +204,7 @@ $(document).ready(function () {
 });
 
 function mouseDown (event) {
-	console.log("going");
+	event.preventDefault();
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
 			console.log(typeof drawItemList[i]);
