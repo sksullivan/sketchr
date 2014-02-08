@@ -195,8 +195,10 @@ function drawStatics() {
 function drawItems() {
 	items.forEach(function (item) {
 		if (item.isRoad) {
-			ctx.moveTo(item.pos1.x, item.pos1.y);
-			ctx.lineTo(item.pos2.x, item.pos2.y);
+			slope = (item.pos2.y-Pos1.y)/(item.pos2.x-Pos1.x);
+			angle = -Math.atan(slope);
+			ctx.moveTo(item.pos1.x-Math.cos(angle)*30, item.pos1.y+Math.sin(angle)*30);
+			ctx.lineTo(item.pos2.x+Math.cos(angle)*30, item.pos2.y-Math.sin(angle)*30);
 			ctx.lineWidth=130;
 			ctx.stroke();
 			ctx.moveTo(item.pos1.x, item.pos1.y);
