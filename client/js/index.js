@@ -72,17 +72,20 @@ function touchDown(event) {
 		road = new Object();
 		road.isRoad = true;
 		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
-		$('#info').text(Math.atan(slope));
-		if (slope<.70) {
+		if (Pos2.y > Pos1.y && Pos2.x > Pos1.x) {
+			angle = -Math.atan(slope)
+		}
+		if (angle<.70) {
 			Pos1.y = (Pos2.y+Pos1.y)/2;
 			Pos2.y = Pos1.y;
-		} else if (Math.atan(slope)<1.43) {
+		} else if (angle<1.43) {
 			ydiff = Pos2.y-Pos1.y;
 			Pos2.x = Pos1.x-ydiff;
 		} else {
 			Pos1.x = (Pos2.x+Pos1.x)/2;
 			Pos2.x = Pos1.x;
 		}
+		$('#info').text(angle/Math.PI*180);
 		road.pos1 = Pos1;
 		road.pos2 = Pos2;
 		items.push(road);
