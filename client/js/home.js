@@ -33,7 +33,6 @@ DrawItem.prototype.contains = function (event) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
 	}
-	//return event.y < this.y+this.height && event.y > this.y && event.x < this.x+this.width && event.x > this.x;
 	return event.y < this.y+this.height && event.y > this.y && event.x < this.x+this.width && event.x > this.x;
 }
 
@@ -102,18 +101,40 @@ Road.prototype.draw = function () {
 	ctx.strokeStyle = '#000000';
 }
 
-/*function Genrator (x,y,heading,type) {
+Road.prototype.toString = function () {
+	return 'Road';
+}
+
+function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.x = x;
 	this.y = y;
-	this.heading = heading;
+	this.size = size;
+	this.heading = heading; // In degrees
+	if (imageName != null) {
+		this.image = new Image();
+		this.image.src = imageName;
+		this.image.owner = this;
+		this.image.onload = function () {
+			this.owner.draw();
+			this.owner.width = this.width;
+			this.owner.height = this.height;
+		}
+	}
+	this.name = name;
+	this.ctx = ctx;
 	this.type = type;
 }
 
-Generator.prototype.makeItem(type) {
-  var item = Object.create();
-  baby.name = name;
-  return baby;
-}*/
+CarGenerator.prototype = new DrawItem();
+
+CarGenerator.prototype.onMouseDown = function () {
+	if (placeMode == "car") {
+		this.rotate(45);
+		redraw();
+	} else {
+		placeMode = "car";
+	}
+}
 
 // Setup and Main code
 
@@ -121,16 +142,21 @@ drawItemList = [];
 ctx = null;
 cvs = null;
 
+placeMode = null;
+carGenerator = null;
+
 $(document).ready(function () {
 	// Initialize scene and Draw Items
 	cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-200;
 	ctx = document.getElementById('canvas').getContext('2d');
-	car = new DrawItem(0,0,0,100,"/assets/redcar.png","the car",ctx);
-	road = new Road(500,0,500,500,130,"the road",ctx);
+	car = new DrawItem(0,150,0,100,"/assets/redcar.png","the car",ctx);
+	road = new Road(500,150,500,500,130,"the road",ctx);
+	carGenerator = new CarGenerator(0,0,0,100,"/assets/redcar.png","the car generator",ctx);
 	drawItemList.push(car);
 	drawItemList.push(road);
+	drawItemList.push(carGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
@@ -140,12 +166,25 @@ $(document).ready(function () {
 });
 
 function mouseDown (event) {
-	drawItemList.forEach(function (drawItem) {
-		if (drawItem.contains(event)) {
-			drawItem.onMouseDown();
-			redraw();
+	console.log("going");
+	for (i=0;i<drawItemList.length;i++) {
+		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
+			console.log(typeof drawItemList[i]);
+			drawItemList[i].onMouseDown();
+			console.log(placeMode);
+			console.log("pressed in for");
+			return;
 		}
-	});
+	}
+	switch (placeMode) {
+		case "car":
+			console.log("pressed in switch");
+			car = new DrawItem(event.x-carGenerator.width/2,event.y-carGenerator.height/2,carGenerator.heading,100,"/assets/redcar.png","the car",this.ctx);
+			drawItemList.push(car);
+			break;
+		default:
+			break;
+	}
 }
 
 function mouseUp (event) {
@@ -160,6 +199,7 @@ function touchDown (event) {
 	event.preventDefault();
 	drawItemList.forEach(function (drawItem) {
 		if (drawItem.contains(event)) {
+			console.log("found one");
 			drawItem.onMouseDown();
 		}
 	});
