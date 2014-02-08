@@ -105,6 +105,8 @@ Road.prototype.toString = function () {
 	return 'Road';
 }
 
+// CarGenrator Class
+
 function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.x = x;
 	this.y = y;
@@ -136,6 +138,39 @@ CarGenerator.prototype.onMouseDown = function () {
 	}
 }
 
+// UninvolvedCarGenrator Class
+
+function UCarGenrator (x,y,heading,size,imageName,name,ctx,type) {
+	this.x = x;
+	this.y = y;
+	this.size = size;
+	this.heading = heading; // In degrees
+	if (imageName != null) {
+		this.image = new Image();
+		this.image.src = imageName;
+		this.image.owner = this;
+		this.image.onload = function () {
+			this.owner.draw();
+			this.owner.width = this.width;
+			this.owner.height = this.height;
+		}
+	}
+	this.name = name;
+	this.ctx = ctx;
+	this.type = type;
+}
+
+UCarGenrator.prototype = new DrawItem();
+
+UCarGenrator.prototype.onMouseDown = function () {
+	if (placeMode == "uCar") {
+		this.rotate(45);
+		redraw();
+	} else {
+		placeMode = "uCar";
+	}
+}
+
 // Setup and Main code
 
 drawItemList = [];
@@ -144,6 +179,7 @@ cvs = null;
 
 placeMode = null;
 carGenerator = null;
+uCarGenerator = null;
 
 $(document).ready(function () {
 	// Initialize scene and Draw Items
@@ -154,9 +190,11 @@ $(document).ready(function () {
 	car = new DrawItem(0,150,0,100,"/assets/redcar.png","the car",ctx);
 	road = new Road(500,150,500,500,130,"the road",ctx);
 	carGenerator = new CarGenerator(0,0,0,100,"/assets/redcar.png","the car generator",ctx);
+	uCarGenerator = new UCarGenrator(220,0,0,100,"/assets/graycar.png","the uninvolved car generator",ctx);
 	drawItemList.push(car);
 	drawItemList.push(road);
 	drawItemList.push(carGenerator);
+	drawItemList.push(uCarGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
@@ -171,16 +209,17 @@ function mouseDown (event) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
 			console.log(typeof drawItemList[i]);
 			drawItemList[i].onMouseDown();
-			console.log(placeMode);
-			console.log("pressed in for");
 			return;
 		}
 	}
 	switch (placeMode) {
 		case "car":
-			console.log("pressed in switch");
 			car = new DrawItem(event.x-carGenerator.width/2,event.y-carGenerator.height/2,carGenerator.heading,100,"/assets/redcar.png","the car",this.ctx);
 			drawItemList.push(car);
+			break;
+		case "uCar":
+			uCar = new DrawItem(event.x-uCarGenerator.width/2,event.y-uCarGenerator.height/2,uCarGenerator.heading,100,"/assets/graycar.png","the car",this.ctx);
+			drawItemList.push(uCar);
 			break;
 		default:
 			break;
@@ -199,10 +238,21 @@ function touchDown (event) {
 	event.preventDefault();
 	drawItemList.forEach(function (drawItem) {
 		if (drawItem.contains(event)) {
-			console.log("found one");
 			drawItem.onMouseDown();
 		}
 	});
+	switch (placeMode) {
+		case "car":
+			car = new DrawItem(event.x-carGenerator.width/2,event.y-carGenerator.height/2,carGenerator.heading,100,"/assets/redcar.png","the car",this.ctx);
+			drawItemList.push(car);
+			break;
+		case "uCar":
+			uCar = new DrawItem(event.x-uCarGenerator.width/2,event.y-uCarGenerator.height/2,uCarGenerator.heading,100,"/assets/graycar.png","the car",this.ctx);
+			drawItemList.push(uCar);
+			break;
+		default:
+			break;
+	}
 }
 
 function redraw () {
