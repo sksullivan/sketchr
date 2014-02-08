@@ -54,6 +54,15 @@ $(document).ready(function () {
 			ctx.drawImage(item,item.posx,item.posy);
 		}
 	});
+
+	$('img').click(function(){
+	    if ($(this).hasClass('isSelected')) {
+	   		$('.isSelected').removeClass('isSelected');
+	    } else {
+		   $('.isSelected').removeClass('isSelected');
+		   $(this).addClass('isSelected');
+	    }
+	});
 });
 
 // Mouse Events
