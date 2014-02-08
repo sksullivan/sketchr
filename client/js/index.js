@@ -89,12 +89,10 @@ function touchDown(event) {
 			Pos1.x = (Pos2.x+Pos1.x)/2;
 			Pos2.x = Pos1.x;
 		}
-		$('#info').text(angle/Math.PI*180);
 		road.pos1 = Pos1;
 		road.pos2 = Pos2;
 		items.push(road);
 		drawItems();
-		//$('#info').text(road.pos1.x+", "+road.pos1.y+" - "+road.pos2.x+", "+road.pos2.y);
 		Pos1.x = 0;
 		Pos1.y = 0;
 		Pos2.x = 0;
@@ -139,12 +137,30 @@ function mouseUp (event) {
 	if (roadMode && event.y > 150) {
 		Pos2.x = event.x;
 		Pos2.y = event.y;
-		newItem = new Object();
-		newItem.isRoad = true;
-		newItem.pos1 = Pos1;
-		newItem.pos2 = Pos2;
-		items.push(newItem);
-		console.log(items);
+
+		road = new Object();
+		road.isRoad = true;
+		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
+		angle = -Math.atan(slope)/Math.PI*180;
+		if (angle > 55) {
+			Pos1.x = (Pos2.x+Pos1.x)/2;
+			Pos2.x = Pos1.x;
+		} else if (angle > 35) {
+			ydiff = Pos2.y-Pos1.y;
+			Pos2.x = Pos1.x-ydiff;
+		} else if (angle > -35) {
+			Pos1.y = (Pos2.y+Pos1.y)/2;
+			Pos2.y = Pos1.y;
+		} else if (angle > -55) {
+			ydiff = Pos2.y-Pos1.y;
+			Pos2.x = Pos1.x+ydiff;
+		} else { 
+			Pos1.x = (Pos2.x+Pos1.x)/2;
+			Pos2.x = Pos1.x;
+		}
+		road.pos1 = Pos1;
+		road.pos2 = Pos2;
+		items.push(road);
 		drawItems();
 	}
 
@@ -181,7 +197,7 @@ function drawItems() {
 		if (item.isRoad) {
 			ctx.moveTo(item.pos1.x, item.pos1.y);
 			ctx.lineTo(item.pos2.x, item.pos2.y);
-			ctx.lineWidth=250;
+			ctx.lineWidth=130;
 			ctx.stroke();
 			ctx.moveTo(item.pos1.x, item.pos1.y);
 			ctx.lineTo(item.pos2.x, item.pos2.y);
