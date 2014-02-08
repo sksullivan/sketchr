@@ -72,7 +72,7 @@ function mouseDown(event) {
 		items.forEach(function (item) {
 			if (isIn(event,item)) {
 				if (item.shouldDragSimple || item.shouldDragComplete) {
-					startDragging(event,item);
+					startDraggingTouch(event,item);
 				}
 				if (item.shouldDragComplete) {
 					roadMode = true;
@@ -100,7 +100,7 @@ function mouseMove (event) {
 		if (draggedItem.shouldDragComplete) {
 
 		}
-		drag(event,draggedItem);
+		dragTouch(event,draggedItem);
 		/*items.forEach(function (item) {
 			if (item.cloned) {
 				drag(event,item);
@@ -177,6 +177,14 @@ function startDragging (event,item) {
 	diffy = event.y - draggedItem.posy;
 }
 
+function startDraggingTouch (event,item) {
+	draggedItem = item;
+	items.remove(items.indexOf(item));
+	items.push(item);
+	diffx = event.targetTouches[0].pageX - draggedItem.posx;
+	diffy = event.targetTouches[0].pageY - draggedItem.posy;
+}
+
 function drag (event,selected) {
 	setPos(selected,event.x-diffx,event.y-diffy);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -184,10 +192,9 @@ function drag (event,selected) {
 	drawItems();
 }
 
-function startDragging (event,item) {
-	draggedItem = item;
-	items.remove(items.indexOf(item));
-	items.push(item);
-	diffx = event.x - draggedItem.posx;
-	diffy = event.y - draggedItem.posy;
+function dragTouch (event,selected) {
+	setPos(selected,event.targetTouches[0].pageX-diffx,event.targetTouches[0].pageY-diffy);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawStatics();
+	drawItems();
 }
