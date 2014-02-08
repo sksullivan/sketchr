@@ -68,9 +68,14 @@ function touchDown(event) {
 			roadPos2.y = roadPos1.y;
 			$('#info').text(Math.atan(slope));
 		} else if (Math.atan(slope)<1.05 && Math.atan(slope)>-1.05) {
-			ydiff = roadPos2.y-roadPos1.y;
-			roadPos2.x = roadPos1.x+ydiff;
-			$('#info').text(Math.atan(slope));
+			if (roadPos2.x > roadPos1.x) {
+				ydiff = roadPos2.y-roadPos1.y;
+				roadPos2.x = roadPos1.x-ydiff;
+			} else {
+				ydiff = roadPos2.y-roadPos1.y;
+				roadPos2.x = roadPos1.x+ydiff;
+			}
+			$('#info').text(Math.atan(slope)+);
 		} else {
 			roadPos1.x = (roadPos2.x+roadPos1.x)/2;
 			roadPos2.x = roadPos1.x;
