@@ -56,11 +56,11 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
-	if (!roadMode) {
+
+	if (roadPos1.x == 0 && roadPos1.y == 0) {
 		roadPos1.x = event.targetTouches[0].pageX;
 		roadPos1.y = event.targetTouches[0].pageY;
-		roadMode = true;
-	} else if (roadMode) {
+	} else if (roadPos2.x == 0 && roadPos2.y == 0) {
 		roadPos2.x = event.targetTouches[0].pageX;
 		roadPos2.y = event.targetTouches[0].pageY;
 	}
@@ -90,7 +90,10 @@ function touchDown(event) {
 	road.pos1 = roadPos1;
 	road.pos2 = roadPos2;
 	items.push(road);
-	roadMode = false;
+	roadPos1.x = 0;
+	roadPos1.y = 0;
+	roadPos2.x = 0;
+	roadPos2.y = 0;
 	drawItems();
 }
 
