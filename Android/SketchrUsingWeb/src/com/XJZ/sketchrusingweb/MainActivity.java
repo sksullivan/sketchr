@@ -42,6 +42,11 @@ public class MainActivity extends Activity implements TabListener {
         tab.setTabListener(this);
         bar.addTab(tab);
         
+        //should be removed
+        tab = bar.newTab();
+        tab.setText("GPS Tester");
+        tab.setTabListener(this);
+        bar.addTab(tab);
     }
 
     @Override
