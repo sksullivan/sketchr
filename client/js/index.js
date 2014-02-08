@@ -22,16 +22,16 @@ $(document).ready(function () {
 	var cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-50;
-	canvas.addEventListener("pointerdown", mouseDown, false);
-	canvas.addEventListener("pointermove", mouseMove, false);
-	canvas.addEventListener("pointerup", mouseUp, false);
+	//canvas.addEventListener("pointerdown", mouseDown, false);
+	//canvas.addEventListener("pointermove", mouseMove, false);
+	//canvas.addEventListener("pointerup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseMove, true);
+	canvas.addEventListener("touchmove", mouseMove, false);
 	canvas.addEventListener("touchend", mouseUp, false);
 
 	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseMove, true);
+	canvas.addEventListener("touchmove", mouseMove, false);
 	canvas.addEventListener("touchend", mouseUp, false);
 
 	// Load items
@@ -59,7 +59,7 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	$('#info').text("POW");
+	$('#info').text("POW "+event.x+","+event.y);
 	if (roadMode) {
 		roadPos1.x = event.x;
 		roadPos1.y = event.y;
@@ -95,7 +95,7 @@ function mouseDown(event) {
 }
 
 function mouseMove (event) {
-	$('#info').text("MOVING");
+	$('#info').text("MOVING "+event.x+","+event.y);
 	if (draggedItem != null) {
 		if (draggedItem.shouldDragComplete) {
 
@@ -110,7 +110,7 @@ function mouseMove (event) {
 }
 
 function mouseUp (event) {
-	$('#info').text("UNPOW");
+	$('#info').text("UNPOW "+event.x+","+event.y);
 	if(roadModeEnd) {
 		roadPos2.x = event.x;
 		roadPos2.y = event.y;
