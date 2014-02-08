@@ -198,7 +198,7 @@ $(document).ready(function () {
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
-	canvas.addEventListener("touchstart", touchDown, false);
+	canvas.addEventListener("touchstart", mouseDown, false);
 
 	redraw();
 });
@@ -234,26 +234,7 @@ function mouseUp (event) {
 	});*/
 }
 
-function touchDown (event) {
-	event.preventDefault();
-	drawItemList.forEach(function (drawItem) {
-		if (drawItem.contains(event)) {
-			drawItem.onMouseDown();
-		}
-	});
-	switch (placeMode) {
-		case "car":
-			car = new DrawItem(event.x-carGenerator.width/2,event.y-carGenerator.height/2,carGenerator.heading,100,"/assets/redcar.png","the car",this.ctx);
-			drawItemList.push(car);
-			break;
-		case "uCar":
-			uCar = new DrawItem(event.x-uCarGenerator.width/2,event.y-uCarGenerator.height/2,uCarGenerator.heading,100,"/assets/graycar.png","the car",this.ctx);
-			drawItemList.push(uCar);
-			break;
-		default:
-			break;
-	}
-}
+
 
 function redraw () {
 	ctx.clearRect(0,0,$(window).width(),$(window).height());
