@@ -95,16 +95,19 @@ Road.prototype.draw = function () {
 	slope = (this.y2-this.y)/(this.x2-this.x);
 	angle = -Math.atan(slope);
 	ctx.beginPath();
+	ctx.strokeStyle = '#000000';
+	ctx.lineWidth = this.size/1.5;
+	ctx.setLineDash([cvs.width+cvs.height]);
 	ctx.moveTo(this.x-Math.cos(angle)*30, this.y+Math.sin(angle)*30);
 	ctx.lineTo(this.x2+Math.cos(angle)*30, this.y2-Math.sin(angle)*30);
-	ctx.lineWidth = this.size;
 	ctx.stroke();
 	ctx.moveTo(this.x-Math.cos(angle)*30, this.y+Math.sin(angle)*30);
 	ctx.lineTo(this.x2+Math.cos(angle)*30, this.y2-Math.sin(angle)*30);
 	ctx.strokeStyle = '#FFFF00'
-	ctx.lineWidth = this.size/10;
+	ctx.lineWidth = this.size/12;
+	ctx.setLineDash([this.size/2,this.size/4]);
 	ctx.stroke();
-	ctx.strokeStyle = '#000000';
+	ctx.setLineDash([cvs.width+cvs.height]);
 }
 
 Road.prototype.toString = function () {
