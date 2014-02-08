@@ -55,13 +55,27 @@ $(document).ready(function () {
 	}
 
 	drawStatics();
+
+	items.forEach(function (item) {
+		item.onload = function () {
+			ctx.drawImage(item,item.posx,item.posy);
+		}
+	});
+
+	$('img').click(function(){
+	    if ($(this).hasClass('isSelected')) {
+	   		$('.isSelected').removeClass('isSelected');
+	    } else {
+		   $('.isSelected').removeClass('isSelected');
+		   $(this).addClass('isSelected');
+	    }
+	});
 });
 
 // Mouse Events
 
 function touchDown(event) {
 	event.preventDefault();
-	$('#info').text(roadMode ? "YES, UNFORTUNATELY" : "NO");
 
 	if (roadMode) {
 		if (Pos1.x == 0 && Pos1.y == 0) {

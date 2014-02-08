@@ -1,0 +1,14 @@
+.imgbar { 
+	padding-left: 50px;
+	padding-bottom: 20px;
+}
+
+img {
+	margin-left: 20px;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+.isSelected {
+	box-shadow: 10px 10px 10px #FE0;
+}
