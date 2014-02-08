@@ -8,10 +8,10 @@ var carMode = false;
 
 var Pos1 = new Object();
 var Pos2 = new Object();
-roadPos1.x = 0;
-roadPos1.y = 0;
-roadPos2.x = 0;
-roadPos2.y = 0;
+Pos1.x = 0;
+Pos1.y = 0;
+Pos2.x = 0;
+Pos2.y = 0;
 
 var tempCar = new Image();
 
@@ -61,43 +61,43 @@ $(document).ready(function () {
 function touchDown(event) {
 	event.preventDefault();
 
-	if (roadPos1.x == 0 && roadPos1.y == 0) {
-		roadPos1.x = event.targetTouches[0].pageX;
-		roadPos1.y = event.targetTouches[0].pageY;
-	} else if (roadPos2.x == 0 && roadPos2.y == 0) {
-		roadPos2.x = event.targetTouches[0].pageX;
-		roadPos2.y = event.targetTouches[0].pageY;
+	if (Pos1.x == 0 && Pos1.y == 0) {
+		Pos1.x = event.targetTouches[0].pageX;
+		Pos1.y = event.targetTouches[0].pageY;
+	} else if (Pos2.x == 0 && Pos2.y == 0) {
+		Pos2.x = event.targetTouches[0].pageX;
+		Pos2.y = event.targetTouches[0].pageY;
 	}
 
 	road = new Object();
 	road.isRoad = true;
-	slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
+	slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
 	$('#info').text(Math.atan(slope));
 	if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
-		roadPos1.y = (roadPos2.y+roadPos1.y)/2;
-		roadPos2.y = roadPos1.y;
+		Pos1.y = (Pos2.y+Pos1.y)/2;
+		Pos2.y = Pos1.y;
 		$('#info').text(Math.atan(slope));
 	} else if (Math.atan(slope)<1.05 && Math.atan(slope)>-1.05) {
-		if (roadPos2.x > roadPos1.x) {
-			ydiff = roadPos2.y-roadPos1.y;
-			roadPos2.x = roadPos1.x-ydiff;
+		if (Pos2.x > Pos1.x) {
+			ydiff = Pos2.y-Pos1.y;
+			Pos2.x = Pos1.x-ydiff;
 		} else {
-			ydiff = roadPos2.y-roadPos1.y;
-			roadPos2.x = roadPos1.x+ydiff;
+			ydiff = Pos2.y-Pos1.y;
+			Pos2.x = Pos1.x+ydiff;
 		}
 		$('#info').text(Math.atan(slope));
 	} else {
-		roadPos1.x = (roadPos2.x+roadPos1.x)/2;
-		roadPos2.x = roadPos1.x;
+		Pos1.x = (Pos2.x+Pos1.x)/2;
+		Pos2.x = Pos1.x;
 		$('#info').text(Math.atan(slope));
 	}
-	road.pos1 = roadPos1;
-	road.pos2 = roadPos2;
+	road.pos1 = Pos1;
+	road.pos2 = Pos2;
 	items.push(road);
-	roadPos1.x = 0;
-	roadPos1.y = 0;
-	roadPos2.x = 0;
-	roadPos2.y = 0;
+	Pos1.x = 0;
+	Pos1.y = 0;
+	Pos2.x = 0;
+	Pos2.y = 0;
 	drawItems();
 }
 
