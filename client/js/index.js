@@ -29,6 +29,7 @@ $(document).ready(function () {
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchmove", mouseMove, false);
 	canvas.addEventListener("touchend", mouseUp, false);
+	canvas.addEventListener("touchcancel", mouseUp, false);
 
 	//canvas.addEventListener("touchstart", mouseDown, false);
 	//canvas.addEventListener("touchmove", mouseMove, false);
