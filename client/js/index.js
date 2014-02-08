@@ -27,7 +27,7 @@ $(document).ready(function () {
 	//canvas.addEventListener("pointerup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", touchDown, false);
-	canvas.addEventListener("touchmove", touchMove, false);
+	//canvas.addEventListener("touchmove", touchMove, false);
 	canvas.addEventListener("touchend", touchUp, false);
 	canvas.addEventListener("touchcancel", touchCancel, false);
 
