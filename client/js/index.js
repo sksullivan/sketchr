@@ -72,7 +72,7 @@ function touchDown(event) {
 		road = new Object();
 		road.isRoad = true;
 		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
-		angle = Math.atan(slope);
+		angle = -Math.atan(slope);
 		if (Pos2.y > Pos1.y && Pos2.x > Pos1.x) {
 			//angle = -angle;
 		}
