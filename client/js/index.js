@@ -26,9 +26,9 @@ $(document).ready(function () {
 	canvas.addEventListener("mousemove", mouseMove, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 
-	can.addEventListener("touchstart", mouseDown, false);
-	can.addEventListener("touchmove", mouseMove, true);
-	can.addEventListener("touchend", mouseUp, false);
+	canvas.addEventListener("touchstart", mouseDown, false);
+	canvas.addEventListener("touchmove", mouseMove, true);
+	canvas.addEventListener("touchend", mouseUp, false);
 
 	// Load items
 	carImg = new Image();
