@@ -26,6 +26,10 @@ $(document).ready(function () {
 	canvas.addEventListener("mousemove", mouseMove, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 
+	can.addEventListener("touchstart", mouseDown, false);
+	can.addEventListener("touchmove", mouseMove, true);
+	can.addEventListener("touchend", mouseUp, false);
+
 	// Load items
 	carImg = new Image();
 	carImg.src = "/assets/redcartop.png"
