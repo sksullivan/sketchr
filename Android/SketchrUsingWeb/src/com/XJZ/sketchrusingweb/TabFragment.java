@@ -38,6 +38,7 @@ import android.view.View.OnClickListener;
 public class TabFragment extends Fragment {
 	
 	private int index;
+	private String path;
 	
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	static final int REQUEST_TAKE_PHOTO = 1;
@@ -58,6 +59,7 @@ public class TabFragment extends Fragment {
 		Bundle data = getArguments();
 		
 		index = data.getInt("idx");
+		path = data.getString("path");
 	}
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
@@ -271,11 +273,23 @@ public class TabFragment extends Fragment {
 	    // Create an image file name
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
 	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    
+	    String filepath = getActivity().getExternalFilesDir(null).getPath();
+	    File file = new File(filepath, path);
+	    
+	    if (!file.exists()) {
+	    	file.mkdirs();
+	    }
+	    
 	    File storageDir = getActivity().getExternalFilesDir(null);
+	    Log.i("camera", storageDir.getAbsolutePath());
+	    Log.i("camera", path);
+	    Log.i("camera", storageDir.getAbsolutePath() + path);
 	    File image = File.createTempFile(
 	        imageFileName,  /* prefix */
 	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
+	        file
+	        //storageDir      /* directory */
 	    );
 
 	    // Save a file: path for use with ACTION_VIEW intents

@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -20,10 +21,14 @@ import android.webkit.WebViewClient;
 public class MainActivity extends Activity implements TabListener {
 
 	List<Fragment> fragList = new ArrayList<Fragment>();
+	String path;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent i = getIntent();
+        Log.i("Main", i.getExtras().get("path").toString());
+        path = i.getExtras().get("path").toString();
         setContentView(R.layout.activity_main);
         
         ActionBar bar = getActionBar();
@@ -75,6 +80,7 @@ public class MainActivity extends Activity implements TabListener {
     		tf = new TabFragment();
     		Bundle data = new Bundle();
     		data.putInt("idx", tab.getPosition());
+    		data.putString("path", path);
     		tf.setArguments(data);
      	} else {
      		tf = (TabFragment)f;

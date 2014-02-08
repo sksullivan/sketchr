@@ -3,18 +3,24 @@ package com.XJZ.sketchrusingweb;
 import android.R.color;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class IntroActivity extends Activity implements OnClickListener {
 	
 	Context context = this;
+	private static String uservalue;
+	static Intent i;
 	
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,14 +36,45 @@ public class IntroActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		Intent i;
 		
 		switch (v.getId()) {
 			case R.id.btnNew:
-				//set new path via dialog
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
 				i = new Intent(this, MainActivity.class);
+
+				Log.i("dialog", "hello!");
+				
+				alert.setTitle("New Case");
+				alert.setMessage("Please name the case:");
+
+				// Set an EditText view to get user input
+				final EditText input = new EditText(this);
+				alert.setView(input);
+
+				alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						uservalue = input.getText().toString();	
+						i.putExtra("path", "" + uservalue);
+						Log.i("dialog", uservalue);
+						startActivity(i);
+					}
+				});
+
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								// Canceled.
+							}
+						});
+
+				alert.show();
+				
+				/*i = new Intent(this, MainActivity.class);
+				
+				getInputViaDialog();
+
 				//addExtra onto Intent of current path
-				startActivity(i);
+				//startActivity(i);*/
 				break;
 				
 			case R.id.btnExisting:
@@ -45,5 +82,35 @@ public class IntroActivity extends Activity implements OnClickListener {
 				
 			}
 		
+	}
+	
+	private void getInputViaDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final String value;
+
+		Log.i("dialog", "hello!");
+		
+		alert.setTitle("New Case");
+		alert.setMessage("Please name the case:");
+
+		// Set an EditText view to get user input
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				//uservalue = input.getText().toString();
+				
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
+
+		alert.show();
 	}
 }
