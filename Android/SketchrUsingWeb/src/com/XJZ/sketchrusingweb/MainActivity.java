@@ -35,19 +35,7 @@ public class MainActivity extends Activity implements TabListener {
         tab.setText("Camera");
         tab.setTabListener(this);
         bar.addTab(tab);
-        
-        /*WebView webview = new WebView(this);
-        webview.setWebViewClient(new WebViewClient());
-        WebSettings websettings = webview.getSettings();
-        websettings.setJavaScriptEnabled(true);
-        
-        setContentView(webview);
-        
-        webview.loadUrl("http://google.com"); */
     }
-    
-    //private 
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
