@@ -87,6 +87,7 @@ Road.prototype.contains = function (event) {
 Road.prototype.draw = function () {
 	slope = (this.y2-this.y)/(this.x2-this.x);
 	angle = -Math.atan(slope);
+	ctx.beginPath();
 	ctx.moveTo(this.x-Math.cos(angle)*30, this.y+Math.sin(angle)*30);
 	ctx.lineTo(this.x2+Math.cos(angle)*30, this.y2-Math.sin(angle)*30);
 	ctx.lineWidth = this.size;
@@ -197,6 +198,54 @@ RoadGenrator.prototype.onMouseDown = function () {
 	placeMode = "road";
 }
 
+// North Arrow Generator
+
+function NorthGenrator (x,y,heading,size,name,ctx) {
+	this.x = x;
+	this.y = y;
+	this.size = size;
+	this.heading = heading; // In degrees
+	this.images = [
+		"/assets/arrowU.png",
+		"/assets/arrowR.png",
+		"/assets/arrowD.png",
+		"/assets/arrowL.png",
+	];
+	this.index = 0;
+	this.image = new Image();
+	this.image.src = this.images[0];
+	this.image.owner = this;
+	this.image.onload = function () {
+		this.owner.draw();
+		this.owner.width = this.width;
+		this.owner.height = this.height;
+	}
+	this.name = name;
+	this.ctx = ctx;
+}
+
+NorthGenrator.prototype = new DrawItem();
+
+NorthGenrator.prototype.draw = function () {
+	//switch (index) {
+	//	case: 
+	//}
+	ctx.translate(-20, +20);
+	ctx.drawImage(this.image,this.x,this.y);
+	ctx.translate(+20, -20);
+}
+
+NorthGenrator.prototype.onMouseDown = function () {
+	if (placeMode == "arrow") {
+		this.index = (this.index+1)%4;
+		this.image.src = this.images[this.index];
+		redraw();
+	} else {
+		placeMode = "arrow";
+		console.log("changed modes");
+	}
+}
+
 // Setup and Main code
 
 drawItemList = [];
@@ -207,6 +256,7 @@ placeMode = null;
 carGenerator = null;
 uCarGenerator = null;
 roadGenerator = null;
+arrowGenerator = null;
 
 tempRoad = null;
 
@@ -219,12 +269,13 @@ $(document).ready(function () {
 	carGenerator = new CarGenerator(0,0,0,100,"/assets/redcar.png","the car generator",ctx);
 	uCarGenerator = new UCarGenrator(220,0,0,100,"/assets/graycar.png","the uninvolved car generator",ctx);
 	roadGenerator = new RoadGenrator(440,0,0,100,"/assets/road.png","the road generator",ctx);
+	arrowGenerator = new NorthGenrator(600,0,0,100,"/assets/arrowU.png","the arrow generator",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
+	drawItemList.push(arrowGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
-	canvas.addEventListener("mouseup", mouseUp, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
 
 	redraw();
@@ -289,6 +340,7 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,$(window).width(),$(window).height());
+	ctx.beginPath();
 	ctx.moveTo(0, 150);
 	ctx.lineTo($(window).width(), 150);
 	ctx.lineWidth = 10;
@@ -296,5 +348,11 @@ function redraw () {
 	ctx.stroke();
 	drawItemList.forEach(function (drawItem) {
 		drawItem.draw();
+	});
+}
+
+function sendData () {
+	$.post('/data', { data: drawItemsList }, function (data) {
+		alert("Success");
 	});
 }
