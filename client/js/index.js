@@ -72,6 +72,7 @@ function touchDown(event) {
 		road.pos2 = roadPos2;
 		items.push(road);
 		roadMode = false;
+		drawItems();
 	}
 }
 
