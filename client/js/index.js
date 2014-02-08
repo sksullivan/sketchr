@@ -8,6 +8,10 @@ var carMode = false;
 
 var Pos1 = new Object();
 var Pos2 = new Object();
+roadPos1.x = 0;
+roadPos1.y = 0;
+roadPos2.x = 0;
+roadPos2.y = 0;
 
 var tempCar = new Image();
 
