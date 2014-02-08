@@ -49,15 +49,57 @@ DrawItem.prototype.move = function (x,y) {
 	this.y += y;
 }
 
-DrawItem.prototype.displayMenu = function () {
-	ctx.translate(0,0);
-	context.beginPath();
-	context.rect(40, 50, 200, 100);
-	context.fillStyle = 'yellow';
-	context.fill();
-	context.lineWidth = 7;
-	context.strokeStyle = 'black';
-	context.stroke();
+function MenuItem (x,y,height,width,text,onMouseDown,draw) {
+	this.x = x;
+	this.y = y;
+	this.height = height;
+	this.width = width;
+	this.text = text;
+	this.onMouseDown = onMouseDown;
+	this.draw = draw;
+}
+
+DrawItem.prototype.displayMenu = function (event) {
+	ctx.translate(event.x-90,event.y-40);
+	deleteItem = new MenuItem(-90,-40,30,60,"Delete",function () {
+		drawItemList.remove(drawItemList.indexOf(selected));
+	});
+	ctx.beginPath();
+	ctx.rect(0,0,60,30);
+	ctx.fillStyle = 'white';
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+	ctx.font="12px Arial";
+	ctx.fillStyle = 'black';
+	ctx.fillText("Delete",10,20);
+
+	ctx.translate(90,0);
+	ctx.beginPath();
+	ctx.rect(0,0,60,30);
+	ctx.fillStyle = 'white';
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+	ctx.font="12px Arial";
+	ctx.fillStyle = 'black';
+	ctx.fillText("Move",10,20);
+
+	ctx.translate(-45,60);
+	ctx.beginPath();
+	ctx.rect(0,0,60,30);
+	ctx.fillStyle = 'white';
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+	ctx.font="12px Arial";
+	ctx.fillStyle = 'black';
+	ctx.fillText("Label",10,20);
+
+	ctx.translate(-event.x+45,-event.y-20);
 }
 
 // Road Class
@@ -111,6 +153,18 @@ Road.prototype.toString = function () {
 	return 'Road';
 }
 
+// Generator Class
+
+function Generator () {
+
+}
+
+Generator.prototype = new DrawItem();
+
+Generator.prototype.isGenerator = function () {
+	return true;
+}
+
 // CarGenerator Class
 
 function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
@@ -133,7 +187,7 @@ function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.type = type;
 }
 
-CarGenerator.prototype = new DrawItem();
+CarGenerator.prototype = new Generator();
 
 CarGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "car") {
@@ -166,7 +220,7 @@ function UCarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.type = type;
 }
 
-UCarGenerator.prototype = new DrawItem();
+UCarGenerator.prototype = new Generator();
 
 UCarGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "uCar") {
@@ -199,7 +253,7 @@ function RoadGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	this.type = type;
 }
 
-RoadGenerator.prototype = new DrawItem();
+RoadGenerator.prototype = new Generator();
 
 RoadGenerator.prototype.onMouseDown = function () {
 	placeMode = "road";
@@ -231,7 +285,7 @@ function NorthGenerator (x,y,heading,size,name,ctx) {
 	this.ctx = ctx;
 }
 
-NorthGenerator.prototype = new DrawItem();
+NorthGenerator.prototype = new Generator();
 
 NorthGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "arrow") {
@@ -247,6 +301,7 @@ NorthGenerator.prototype.onMouseDown = function () {
 // Setup and Main code
 
 drawItemList = [];
+menuItems = [];
 ctx = null;
 cvs = null;
 
@@ -255,6 +310,8 @@ carGenerator = null;
 uCarGenerator = null;
 roadGenerator = null;
 northGenerator = null;
+
+menuOut = false;
 
 tempRoad = null;
 
@@ -280,22 +337,19 @@ $(document).ready(function () {
 	redraw();
 });
 
-/*function mouseDrag (event) {
-	event.preventDefault();
-	for (i=0;i<drawItemList.length;i++) {
-		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
-			drawItemList[i].x = event.targetTouches[0].pageX;
-			drawItemList[i].y = event.targetTouches[0].pageY;
-			return;
-		}
-	}
-}*/
-
 function mouseDown (event) {
 	event.preventDefault();
+	//if (menuOut) {
+	//	if (event.)
+	//}
+
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
-			drawItemList[i].onMouseDown();
+			if (!drawItemList[i].isGenerator) {
+				drawItemList[i].displayMenu(event);
+			} else {
+				drawItemList[i].onMouseDown();
+			}
 			return;
 		}
 	}
@@ -350,6 +404,7 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
+	ctx.beginPath();
 	ctx.moveTo(0, cvs.width/1600*160);
 	ctx.lineTo(cvs.width, cvs.width/1600*160);
 	ctx.lineWidth = 10;
