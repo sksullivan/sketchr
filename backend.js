@@ -45,9 +45,7 @@ onlineUsers = [];
 // PAGE ROUTES ------------------------------------
 
 app.get('/', function (req,res) {
-	res.render("index", {
-		title: 'index'
-	});
+	res.render("index");
 });
 
 app.post('/data', function (req,res) {
