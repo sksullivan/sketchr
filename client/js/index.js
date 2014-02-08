@@ -9,6 +9,8 @@ var carMode = false;
 var Pos1 = new Object();
 var Pos2 = new Object();
 
+var tempCar = new Image();
+
 // Setup
 
 $(document).ready(function () {
@@ -23,13 +25,13 @@ $(document).ready(function () {
 	canvas.addEventListener("mouseup", mouseUp, false);
 
 	// Load items
-	carImg = new Image();
-	carImg.src = "/assets/redcartop.png";
-	setPos(carImg,0,10);
-
 	roadImg = new Image();
 	roadImg.src = "/assets/road.png";
-	setPos(roadImg,300,10);
+	setPos(roadImg,75,10);
+
+	carImg = new Image();
+	carImg.src = "/assets/redcartop.png";
+	setPos(carImg,300,15);
 
 	cancelImg = new Image();
 	cancelImg.src = "/assets/cancel.png";
@@ -40,6 +42,7 @@ $(document).ready(function () {
 	items.push(cancelImg);
 	
 	drawStatics();
+
 	items.forEach(function (item) {
 		item.onload = function () {
 			ctx.drawImage(item,item.posx,item.posy);
@@ -53,23 +56,29 @@ function mouseDown(event) {
 	Pos1.x = event.x;
 	Pos1.y = event.y;
 
-	if (isIn(event,carImg)) {
-		roadMode = false;
-		carMode = true;
-		$(this).css('cursor', 'url(/assets/carcursor.png), auto');
-	}
-
 	if (isIn(event,roadImg)) {
+		allFalse();
 		roadMode = true;
 		$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
 	}
 
+	if (isIn(event,carImg)) {
+		allFalse();
+		carMode = true;
+		$(this).css('cursor', 'url(/assets/carcursor.png), auto');
+	}
+
 	if (isIn(event,cancelImg)) {
-		roadMode = false;
+		allFalse();
 		$(this).css('cursor', 'auto');
 	}
 
 	console.log(event.x+", "+event.y);
+}
+
+function allFalse() {
+	roadMode = false;
+	carMode = false;
 }
 
 function mouseMove (event) {
@@ -77,7 +86,7 @@ function mouseMove (event) {
 }
 
 function mouseUp (event) {
-	if(roadMode) {
+	if (roadMode && event.y > 150) {
 		Pos2.x = event.x;
 		Pos2.y = event.y;
 		newItem = new Object();
@@ -88,6 +97,14 @@ function mouseUp (event) {
 		console.log(items);
 		drawItems();
 	}
+
+	if (carMode && event.y > 150) {
+		console.log(tempCar);
+		tempCar.src = "/assets/redcartop.png";
+		// ctx.drawImage(tempCar,event.x,event.y);
+		tempCar.onload = function() { ctx.drawImage(tempCar, event.x, event.y-35); }
+	}
+
 	console.log(Pos1);
 	console.log(Pos2);
 	console.log(items);
