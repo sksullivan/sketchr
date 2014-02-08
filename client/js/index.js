@@ -30,6 +30,10 @@ $(document).ready(function () {
 	canvas.addEventListener("touchmove", mouseMove, true);
 	canvas.addEventListener("touchend", mouseUp, false);
 
+	canvas.addEventListener("touchstart", mouseDown, false);
+	canvas.addEventListener("touchmove", mouseMove, true);
+	canvas.addEventListener("touchend", mouseUp, false);
+
 	// Load items
 	carImg = new Image();
 	carImg.src = "/assets/redcartop.png"
@@ -91,6 +95,7 @@ function mouseDown(event) {
 }
 
 function mouseMove (event) {
+	$('#info').text("MOVING");
 	if (draggedItem != null) {
 		if (draggedItem.shouldDragComplete) {
 
@@ -105,6 +110,7 @@ function mouseMove (event) {
 }
 
 function mouseUp (event) {
+	$('#info').text("UNPOW");
 	if(roadModeEnd) {
 		roadPos2.x = event.x;
 		roadPos2.y = event.y;
