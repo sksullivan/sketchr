@@ -59,12 +59,12 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
+	$('#info').text(roadMode ? "YES" : "NO");
 	if (isIn(event,roadImg)) {
 		roadMode = true;
 	}
 	if (roadMode) {
 		if (Pos1.x == 0 && Pos1.y == 0) {
-			$('#info').text("set first");
 			Pos1.x = event.targetTouches[0].pageX;
 			Pos1.y = event.targetTouches[0].pageY;
 		} else {
@@ -105,6 +105,7 @@ function touchDown(event) {
 }
 
 function mouseDown(event) {
+	$('#info').text(roadMode ? "YES" : "NO");
 	Pos1.x = event.x;
 	Pos1.y = event.y;
 
@@ -179,7 +180,11 @@ function mouseUp (event) {
 // Helper Methods
 
 function isIn (event,element) {
-	return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
+	if (event.x != 0) {
+		return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
+	} else {
+		return event.targetTouches[0].pageX < element.posx+element.width && event.targetTouches[0].pageX > element.posx && event.targetTouches[0].pageY < element.posy+element.height && event.targetTouches[0].pageY > element.posy;
+	}
 }
 
 function setPos (element,x,y) {
