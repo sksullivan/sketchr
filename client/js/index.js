@@ -124,7 +124,7 @@ function touchDown(event) {
 		items.push(tempCar);
 		tempCar.onload = function() {
 			items.push(tempCar);
-			setPos(tempCar,event.x-tempCar.width/2,event.y-tempCar.height/2);
+			setPos(tempCar,event.targetTouches[0].pageX-tempCar.width/2,event.targetTouches[0].pageY-tempCar.height/2);
 			drawItems();
 		}
 	}
