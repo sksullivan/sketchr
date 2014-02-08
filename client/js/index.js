@@ -22,17 +22,17 @@ $(document).ready(function () {
 	var cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-50;
-	//canvas.addEventListener("pointerdown", mouseDown, false);
-	//canvas.addEventListener("pointermove", mouseMove, false);
-	//canvas.addEventListener("pointerup", mouseUp, false);
+	canvas.addEventListener("pointerdown", mouseDown, false);
+	canvas.addEventListener("pointermove", mouseMove, false);
+	canvas.addEventListener("pointerup", mouseUp, false);
 
-	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseMove, false);
-	canvas.addEventListener("touchend", mouseUp, false);
+	//canvas.addEventListener("touchstart", mouseDown, false);
+	//canvas.addEventListener("touchmove", mouseMove, false);
+	//canvas.addEventListener("touchend", mouseUp, false);
 
-	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseMove, false);
-	canvas.addEventListener("touchend", mouseUp, false);
+	//canvas.addEventListener("touchstart", mouseDown, false);
+	//canvas.addEventListener("touchmove", mouseMove, false);
+	//canvas.addEventListener("touchend", mouseUp, false);
 
 	// Load items
 	carImg = new Image();
