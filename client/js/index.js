@@ -94,12 +94,12 @@ function touchDown(event) {
 		road.pos1 = Pos1;
 		road.pos2 = Pos2;
 		items.push(road);
+		drawItems();
 		$('#info').text(road.pos1.x+", "+road.pos1.y+" - "+road.pos2.x+", "+road.pos2.y);
 		Pos1.x = 0;
 		Pos1.y = 0;
 		Pos2.x = 0;
 		Pos2.y = 0;
-		drawItems();
 	}
 }
 
