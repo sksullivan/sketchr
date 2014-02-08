@@ -26,14 +26,14 @@ $(document).ready(function () {
 	//canvas.addEventListener("pointermove", mouseMove, false);
 	//canvas.addEventListener("pointerup", mouseUp, false);
 
-	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseMove, false);
-	canvas.addEventListener("touchend", mouseUp, false);
-	//canvas.addEventListener("touchcancel", mouseUp, false);
+	canvas.addEventListener("touchstart", touchDown, false);
+	canvas.addEventListener("touchmove", touchMove, false);
+	canvas.addEventListener("touchend", touchUp, false);
+	canvas.addEventListener("touchcancel", touchCancel, false);
 
-	//canvas.addEventListener("touchstart", mouseDown, false);
-	//canvas.addEventListener("touchmove", mouseMove, false);
-	//canvas.addEventListener("touchend", mouseUp, false);
+	canvas.addEventListener("mousedown", mouseDown, false);
+	canvas.addEventListener("mousemove", mouseMove, false);
+	canvas.addEventListener("mouseup", mouseUp, false);
 
 	// Load items
 	carImg = new Image();
@@ -60,75 +60,31 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	if (roadMode) {
-		$('#info').text("ROAD "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-		roadPos1.x = event.targetTouches[0].pageX;
-		roadPos1.y = event.targetTouches[0].pageY;
-		roadMode = false;
-		roadModeEnd = true;
-	}
-	if(roadModeEnd) {
-		$('#info').text("ROAD END"+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-		roadPos2.x = event.targetTouches[0].pageX;
-		roadPos2.y = event.targetTouches[0].pageY;
-		newItem = new Object();
-		newItem.isRoad = true;
-		newItem.pos1 = roadPos1;
-		newItem.pos2 = roadPos2;
-		items.push(newItem);
-		road = null;
-		roadModeEnd = false
-		drawItems();
-	}
-
-
-	if (!mouseIsDown) {
-		items.forEach(function (item) {
-			if (isIn(event,item)) {
-				if (item.shouldDragSimple || item.shouldDragComplete) {
-					startDraggingTouch(event,item);
-				}
-				if (item.shouldDragComplete) {
-					roadMode = true;
-					road = item;
-					/*for (i=0;i<$(window).height()/draggedItem.height;i++) {
-						newItem = draggedItem.cloneNode(false);
-						newItem.cloned = true;
-						setPos(newItem,draggedItem.posx,draggedItem.posy+draggedItem.height*(i+1));
-						console.log(newItem);
-						items.push(newItem);
-					}
-					drawItems();
-					console.log(items);*/
-				}
-			}
-		});
-	}
-	mouseIsDown = true;
-	console.log(event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+	$('#info').text("DOWN "+event.x+","+event.y);
 }
 
 function mouseMove (event) {
-	$('#info').text("MOVING "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-	if (draggedItem != null) {
-		if (draggedItem.shouldDragComplete) {
-
-		}
-		dragTouch(event,draggedItem);
-		/*items.forEach(function (item) {
-			if (item.cloned) {
-				drag(event,item);
-			}
-		});*/
-	}
+	$('#info').text("MOVING "+event.x+","+event.y);
 }
 
 function mouseUp (event) {
-	$('#info').text("UNPOW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-	console.log(items);
+	$('#info').text("UP "+event.x+","+event.y);
+}
 
-	mouseIsDown = false;
-	draggedItem = null;
+function touchDown(event) {
+	$('#info').text("T-DOWN "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+}
+
+function touchMove (event) {
+	$('#info').text("T-MOVING "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+}
+
+function touchUp (event) {
+	$('#info').text("T-UP "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
+}
+
+function touchCancel (event) {
+	$('#info').text("T-CANCEL "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 // Helper Methods
