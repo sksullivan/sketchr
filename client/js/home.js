@@ -29,12 +29,12 @@ DrawItem.prototype.draw = function () {
 }
 
 DrawItem.prototype.contains = function (event) {
-	/*if (event.targetTouches) {
+	if (event.targetTouches) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
-	}*/
+	}
 	//return event.y < this.y+this.height && event.y > this.y && event.x < this.x+this.width && event.x > this.x;
-	return event.targetTouches[0].pageY < this.y+this.height && event.targetTouches[0].pageY > this.y && event.targetTouches[0].pageX < this.x+this.width && event.targetTouches[0].pageX > this.x;
+	return event.y < this.y+this.height && event.y > this.y && event.x < this.x+this.width && event.x > this.x;
 }
 
 DrawItem.prototype.onMouseDown = function () {
@@ -80,11 +80,11 @@ Road.prototype.onMouseDown = function () {
 }
 
 Road.prototype.contains = function (event) {
-	/*if (event.targetTouches) {
+	if (event.targetTouches) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
-	}*/
-	return event.targetTouches[0].pageY < this.y+this.height/2 && event.targetTouches[0].pageY > this.y-this.height/2 && event.targetTouches[0].pageX < this.x+this.width/2 && event.targetTouches[0].pageX > this.x-this.width/2;
+	}
+	return event.y < this.y+this.height/2 && event.y > this.y-this.height/2 && event.x < this.x+this.width/2 && event.x > this.x-this.width/2;
 }
 
 Road.prototype.draw = function () {
