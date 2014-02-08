@@ -10,7 +10,9 @@ import android.app.ActionBar.TabListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,12 +24,13 @@ public class MainActivity extends Activity implements TabListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         
         ActionBar bar = getActionBar();
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         Tab tab = bar.newTab();
-        tab.setText("Draw");
+        tab.setText("Sketch");
         tab.setTabListener(this);
         bar.addTab(tab);
         
@@ -84,6 +87,27 @@ public class MainActivity extends Activity implements TabListener {
     	if (fragList.size() > tab.getPosition()) {
     		ft.remove(fragList.get(tab.getPosition()));
     	}
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent i;
+    	
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                //blah
+                return true;
+            case R.id.action_save:
+                //blah
+                return true;
+            case R.id.action_help:
+            	i = new Intent(this, HelpView.class);
+            	startActivity(i);
+            	return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     
 }
