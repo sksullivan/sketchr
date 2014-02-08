@@ -50,4 +50,8 @@ app.get('/', function (req,res) {
 	});
 });
 
+app.post('/data', function (req,res) {
+	res.send(req.body.data+" was your data.");
+});
+
 server.listen(process.env.PORT || 5000);

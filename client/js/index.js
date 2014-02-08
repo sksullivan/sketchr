@@ -202,6 +202,14 @@ Array.prototype.remove = function (from, to) { // Remove element code snippet by
   return this.push.apply(this, rest);
 };
 
+// Data
+
+function sendData () {
+	$.post('/data', { data: items.length }, function (data) {
+		console.log(data);
+	});
+}
+
 // function startDragging (event,item) {
 // 	draggedItem = item;
 // 	items.remove(items.indexOf(item));
