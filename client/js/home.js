@@ -101,7 +101,15 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	labelItem = new MenuItem(event.x,event.y+5,60,30,function () {
-		selectd.name = "POOOOTIS";
+		label = prompt("Enter a name.");
+		selected.name = label;
+		var username = new CanvasText( canvas, {
+			x: 'center',
+			y: 120,
+			width: 300,
+			placeholder: 'Enter a name...'
+		});
+		console.log(selected.name);
 	}, function () {
 		ctx.translate(0,5);
 		ctx.beginPath();
