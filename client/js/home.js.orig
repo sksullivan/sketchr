@@ -200,7 +200,7 @@ RoadGenerator.prototype.onMouseDown = function () {
 
 // North Arrow Generator
 
-function NorthGenerator (x,y,heading,size,name,ctx) {
+function NorthGenrator (x,y,heading,size,name,ctx) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -224,9 +224,9 @@ function NorthGenerator (x,y,heading,size,name,ctx) {
 	this.ctx = ctx;
 }
 
-NorthGenerator.prototype = new DrawItem();
+NorthGenrator.prototype = new DrawItem();
 
-NorthGenerator.prototype.draw = function () {
+NorthGenrator.prototype.draw = function () {
 	//switch (index) {
 	//	case: 
 	//}
@@ -235,7 +235,7 @@ NorthGenerator.prototype.draw = function () {
 	ctx.translate(+20, -20);
 }
 
-NorthGenerator.prototype.onMouseDown = function () {
+NorthGenrator.prototype.onMouseDown = function () {
 	if (placeMode == "arrow") {
 		this.index = (this.index+1)%4;
 		this.image.src = this.images[this.index];
@@ -256,7 +256,7 @@ placeMode = null;
 carGenerator = null;
 uCarGenerator = null;
 roadGenerator = null;
-northGenerator = null;
+arrowGenerator = null;
 
 tempRoad = null;
 
@@ -266,14 +266,20 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
+<<<<<<< HEAD
+	carGenerator = new CarGenerator(0,0,0,100,"/assets/redcar.png","the car generator",ctx);
+	uCarGenerator = new UCarGenrator(220,0,0,100,"/assets/graycar.png","the uninvolved car generator",ctx);
+	roadGenerator = new RoadGenrator(440,0,0,100,"/assets/road.png","the road generator",ctx);
+	arrowGenerator = new NorthGenrator(600,0,0,100,"/assets/arrowU.png","the arrow generator",ctx);
+=======
 	carGenerator = new CarGenerator(1/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/redcar.png","the car generator",ctx);
 	uCarGenerator = new UCarGenerator(1/10*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/graycar.png","the uninvolved car generator",ctx);
 	roadGenerator = new RoadGenerator(19/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
-	northGenerator = new NorthGenerator(29/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
+>>>>>>> f447f374a802cba36f705a43cb4ddc43c88e4076
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
-	drawItemList.push(northGenerator);
+	drawItemList.push(arrowGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
@@ -339,20 +345,26 @@ function mouseDown (event) {
 }
 
 function redraw () {
+<<<<<<< HEAD
+	ctx.clearRect(0,0,$(window).width(),$(window).height());
+	ctx.beginPath();
+	ctx.moveTo(0, 150);
+	ctx.lineTo($(window).width(), 150);
+=======
 	ctx.clearRect(0,0,cvs.width,cvs.height);
 	ctx.moveTo(0, cvs.width/2500*160);
 	ctx.lineTo(cvs.width, cvs.width/2500*160);
+>>>>>>> f447f374a802cba36f705a43cb4ddc43c88e4076
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#000000';
 	ctx.stroke();
-	console.log(drawItemList);
 	drawItemList.forEach(function (drawItem) {
 		drawItem.draw();
 	});
 }
 
 function sendData () {
-	$.post('/data', { data: drawItemList }, function (data) {
+	$.post('/data', { data: drawItemsList }, function (data) {
 		alert("Success");
 	});
 }
