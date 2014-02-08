@@ -145,7 +145,14 @@ function drawItems() {
 		if (item.isRoad) {
 			ctx.moveTo(item.pos1.x, item.pos1.y);
 			ctx.lineTo(item.pos2.x, item.pos2.y);
+			ctx.lineWidth=250;
 			ctx.stroke();
+			ctx.moveTo(item.pos1.x, item.pos1.y);
+			ctx.lineTo(item.pos2.x, item.pos2.y);
+			ctx.strokeStyle = '#FFFF00'
+			ctx.lineWidth=10;
+			ctx.stroke();
+			ctx.strokeStyle = '#000000';
 		} else {
 			ctx.drawImage(item,item.posx,item.posy);
 		}
