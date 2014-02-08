@@ -27,7 +27,7 @@ app.configure(function () {
 	app.use(express.static(__dirname + '/client'));
 	app.use(function (req,res) {
 		res.send('404 - Not found');
-		console.log('   error (backend) - '.red+'client requested an undefined route :(');
+		console.log('   error(backend) - '.red+'client requested an undefined route :(');
 	});
 });
 
