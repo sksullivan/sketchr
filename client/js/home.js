@@ -37,7 +37,7 @@ DrawItem.prototype.contains = function (event) {
 }
 
 DrawItem.prototype.onMouseDown = function () {
-	console.log("pressed");
+	$('#info').text("pressed a draw");
 }
 
 DrawItem.prototype.onMouseUp = function () {
@@ -75,7 +75,7 @@ function Road (x,y,x2,y2,size,name,ctx) {
 Road.prototype = new DrawItem();
 
 Road.prototype.onMouseDown = function () {
-	console.log("pressed2");
+	$('#info').text("pressed2");
 }
 
 Road.prototype.contains = function (event) {
