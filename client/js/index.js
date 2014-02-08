@@ -22,14 +22,8 @@ $(document).ready(function () {
 	var cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-50;
-	//canvas.addEventListener("pointerdown", mouseDown, false);
-	//canvas.addEventListener("pointermove", mouseMove, false);
-	//canvas.addEventListener("pointerup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", touchDown, false);
-	//canvas.addEventListener("touchmove", touchMove, false);
-	canvas.addEventListener("touchend", touchUp, false);
-	canvas.addEventListener("touchcancel", touchCancel, false);
 
 	// Load items
 	carImg = new Image();
@@ -68,25 +62,23 @@ function touchDown(event) {
 
 		road = new Object();
 		road.isRoad = true;
+		slope = (roadPos2.y-roadPos1.y)/(roadPos2.x-roadPos1.x);
+		if (slope < .57) {
+			roadPos1.y = (roadPos2.y+roadPos1.y)/2;
+			roadPos2.y = (roadPos2.y+roadPos1.y)/2;
+		} else if (slope < 1.73) {
+			ydiff = roadPos2.y-roadPos1.y;
+			roadPos2.x = roadPos1.x+ydiff;
+		} else {
+			roadPos1.x = (roadPos2.x+roadPos1.x)/2;
+			roadPos2.x = (roadPos2.x+roadPos1.x)/2;
+		}
 		road.pos1 = roadPos1;
 		road.pos2 = roadPos2;
 		items.push(road);
 		roadMode = false;
 		drawItems();
 	}
-}
-
-function touchMove (event) {
-	event.preventDefault();
-	$('#info').text("T-MOVING "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-}
-
-function touchUp (event) {
-	$('#info').text("T-UP "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
-}
-
-function touchCancel (event) {
-	$('#info').text("T-CANCEL "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 // Helper Methods
