@@ -275,12 +275,12 @@ $(document).ready(function () {
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseDrag, false);
+	//canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
 
-function mouseDrag (event) {
+/*function mouseDrag (event) {
 	event.preventDefault();
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
@@ -289,9 +289,9 @@ function mouseDrag (event) {
 			return;
 		}
 	}
-}
+}*/
 
-/*function mouseDown (event) {
+function mouseDown (event) {
 	event.preventDefault();
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
@@ -346,7 +346,7 @@ function mouseDrag (event) {
 			break;
 	}
 	redraw();
-}*/
+}
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
