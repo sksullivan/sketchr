@@ -49,57 +49,80 @@ DrawItem.prototype.move = function (x,y) {
 	this.y += y;
 }
 
-function MenuItem (x,y,height,width,text,onMouseDown,draw) {
+function MenuItem (x,y,w,h,onMouseDown,draw) {
 	this.x = x;
 	this.y = y;
-	this.height = height;
-	this.width = width;
-	this.text = text;
+	this.height = h;
+	this.width = w;
+	this.size = 1;
 	this.onMouseDown = onMouseDown;
 	this.draw = draw;
 }
 
+MenuItem.prototype = new DrawItem();
+
 DrawItem.prototype.displayMenu = function (event) {
-	ctx.translate(event.x-90,event.y-40);
-	deleteItem = new MenuItem(-90,-40,30,60,"Delete",function () {
+	menuX = event.x;
+	menuY = event.y;
+	deleteItem = new MenuItem(event.x-45,event.y-40,60,30,function () {
 		drawItemList.remove(drawItemList.indexOf(selected));
+		dismissMenu();
+		redraw();
+	}, function () {
+		ctx.translate(-45,-40);
+		ctx.beginPath();
+		ctx.rect(0,0,60,30);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = 'black';
+		ctx.stroke();
+		ctx.font="12px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText("Delete",10,20);
+		ctx.translate(45,40);
 	});
-	ctx.beginPath();
-	ctx.rect(0,0,60,30);
-	ctx.fillStyle = 'white';
-	ctx.fill();
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'black';
-	ctx.stroke();
-	ctx.font="12px Arial";
-	ctx.fillStyle = 'black';
-	ctx.fillText("Delete",10,20);
 
-	ctx.translate(90,0);
-	ctx.beginPath();
-	ctx.rect(0,0,60,30);
-	ctx.fillStyle = 'white';
-	ctx.fill();
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'black';
-	ctx.stroke();
-	ctx.font="12px Arial";
-	ctx.fillStyle = 'black';
-	ctx.fillText("Move",10,20);
+	moveItem = new MenuItem(event.x+45,event.y-40,60,30,function () {
+		moving = selected;
+	}, function () {
+		ctx.translate(45,-40);
+		ctx.beginPath();
+		ctx.rect(0,0,60,30);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = 'black';
+		ctx.stroke();
+		ctx.font="12px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText("Move",10,20);
+		ctx.translate(-45,40);
+	});
 
-	ctx.translate(-45,60);
-	ctx.beginPath();
-	ctx.rect(0,0,60,30);
-	ctx.fillStyle = 'white';
-	ctx.fill();
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'black';
-	ctx.stroke();
-	ctx.font="12px Arial";
-	ctx.fillStyle = 'black';
-	ctx.fillText("Label",10,20);
+	labelItem = new MenuItem(event.x,event.y+5,60,30,function () {
+		selectd.name = "POOOOTIS";
+	}, function () {
+		ctx.translate(0,5);
+		ctx.beginPath();
+		ctx.rect(0,0,60,30);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+		ctx.lineWidth = 1;
+		ctx.strokeStyle = 'black';
+		ctx.stroke();
+		ctx.font="12px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText("Label",10,20);
+		ctx.translate(0,-5);
+	});
 
-	ctx.translate(-event.x+45,-event.y-20);
+	menuItems.push(deleteItem);
+	menuItems.push(moveItem);
+	menuItems.push(labelItem);
+	redraw();
+
+	
 }
 
 // Road Class
@@ -305,6 +328,8 @@ NorthGenerator.prototype.onMouseDown = function () {
 
 drawItemList = [];
 menuItems = [];
+menuX = 0;
+menuY = 0;
 ctx = null;
 cvs = null;
 
@@ -313,8 +338,6 @@ carGenerator = null;
 uCarGenerator = null;
 roadGenerator = null;
 northGenerator = null;
-
-menuOut = false;
 
 tempRoad = null;
 
@@ -342,14 +365,22 @@ $(document).ready(function () {
 
 function mouseDown (event) {
 	event.preventDefault();
-	//if (menuOut) {
-	//	if (event.)
-	//}
+	if (menuItems.length > 0) {
+		for (i=0;i<menuItems.length;i++) {
+			console.log("foiund");
+			if (menuItems[i].contains(event)) {
+				console.log("foiundINGING");
+				menuItems[i].onMouseDown();
+				return;
+			}
+		}
+	}
 
 	for (i=0;i<drawItemList.length;i++) {
 		if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
 			if (!drawItemList[i].isGenerator) {
 				drawItemList[i].displayMenu(event);
+				selected = drawItemList[i];
 			} else {
 				drawItemList[i].onMouseDown();
 			}
@@ -417,7 +448,24 @@ function redraw () {
 	drawItemList.forEach(function (drawItem) {
 		drawItem.draw();
 	});
+	ctx.translate(event.x,event.y);
+	menuItems.forEach(function (menuItem) {
+		menuItem.draw();
+	});
+	ctx.translate(-event.x,-event.y);
 }
+
+// Other Methods
+
+function dismissMenu () {
+	menuItems = [];
+}
+
+Array.prototype.remove = function (from, to) { // Remove element code snippet by John Resig, creator of jQuery
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
 
 function sendData () {
 	$.post('/data', { data: drawItemList }, function (data) {
