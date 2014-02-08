@@ -157,11 +157,12 @@ function mouseUp (event) {
 }
 
 function touchDown (event) {
-	/*drawItemList.forEach(function (drawItem) {
-		if (isIn(event,drawItem)) {
-			drawItem.rotate(45);
+	event.preventDefault();
+	drawItemList.forEach(function (drawItem) {
+		if (drawItem.contains(event)) {
+			drawItem.onMouseDown();
 		}
-	});*/
+	});
 }
 
 function redraw () {
