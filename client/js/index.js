@@ -181,7 +181,7 @@ function mouseUp (event) {
 
 function isIn (event,element) {
 	if (event.x != 0) {
-		$('#info').text("BULLSHIT");
+		$('#info').text(event.x);
 		return event.x < element.posx+element.width && event.x > element.posx && event.y < element.posy+element.height && event.y > element.posy;
 	} else {
 		return event.targetTouches[0].pageX < element.posx+element.width && event.targetTouches[0].pageX > element.posx && event.targetTouches[0].pageY < element.posy+element.height && event.targetTouches[0].pageY > element.posy;
