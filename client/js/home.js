@@ -233,15 +233,6 @@ function NorthGenerator (x,y,heading,size,name,ctx) {
 
 NorthGenerator.prototype = new DrawItem();
 
-NorthGenerator.prototype.draw = function () {
-	//switch (index) {
-	//	case: 
-	//}
-	ctx.translate(-20, +20);
-	ctx.drawImage(this.image,this.x,this.y);
-	ctx.translate(+20, -20);
-}
-
 NorthGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "arrow") {
 		this.index = (this.index+1)%4;
@@ -273,10 +264,10 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
-	carGenerator = new CarGenerator(1/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/redcar.png","the car generator",ctx);
-	uCarGenerator = new UCarGenerator(1/10*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/graycar.png","the uninvolved car generator",ctx);
-	roadGenerator = new RoadGenerator(19/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
-	northGenerator = new NorthGenerator(29/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/arrowU.png","the north generator",ctx);
+	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","the car generator",ctx);
+	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","the uninvolved car generator",ctx);
+	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","the road generator",ctx);
+	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrowU.png","the north generator",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
@@ -347,8 +338,8 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
-	ctx.moveTo(0, cvs.width/2500*160);
-	ctx.lineTo(cvs.width, cvs.width/2500*160);
+	ctx.moveTo(0, cvs.width/1600*160);
+	ctx.lineTo(cvs.width, cvs.width/1600*160);
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#000000';
 	ctx.stroke();
