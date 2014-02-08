@@ -1,6 +1,7 @@
 // Variables
 
-var roadImg, carImg, cancelImg;
+// var roadImg, carImg, deleteImg;
+var vOffset;
 var items = [];
 var ctx,diffx,diffy;
 var roadMode = false;
@@ -25,49 +26,73 @@ $(document).ready(function () {
 	ctx = document.getElementById('canvas').getContext('2d');
 	var cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
-	cvs.height  = $(window).height()-50;
+	cvs.height  = $(window).height();
+	vOffset = $(canvas).offset().top;
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", touchDown, false);
 
-	// Load items
-	roadImg = new Image();
-	roadImg.src = "/assets/road.png";
-	setPos(roadImg,75,10);
+	// // Load items
+	// roadImg = new Image();
+	// roadImg.src = "/assets/road.png";
+	// setPos(roadImg,75,10);
 
-	carImg = new Image();
-	carImg.src = "/assets/redcartop.png";
-	setPos(carImg,300,15);
+	// carImg = new Image();
+	// carImg.src = "/assets/redcar.png";
+	// setPos(carImg,300,15);
 
-	cancelImg = new Image();
-	cancelImg.src = "/assets/cancel.png";
-	setPos(cancelImg,600,-10);
+	// deleteImg = new Image();
+	// deleteImg.src = "/assets/delete.png";
+	// setPos(deleteImg,600,-10);
 
-	roadImg.onload = function () {
-		ctx.drawImage(roadImg,roadImg.posx,roadImg.posy);
-	}
-	carImg.onload = function () {
-		ctx.drawImage(carImg,carImg.posx,carImg.posy);
-	}
-	cancelImg.onload = function () {
-		ctx.drawImage(cancelImg,cancelImg.posx,cancelImg.posy);
-	}
+	// roadImg.onload = function () {
+	// 	ctx.drawImage(roadImg,roadImg.posx,roadImg.posy);
+	// }
+	// carImg.onload = function () {
+	// 	ctx.drawImage(carImg,carImg.posx,carImg.posy);
+	// }
+	// deleteImg.onload = function () {
+	// 	ctx.drawImage(deleteImg,deleteImg.posx,deleteImg.posy);
+	// }
 
-	drawStatics();
+	// drawStatics();
 
-	items.forEach(function (item) {
-		item.onload = function () {
-			ctx.drawImage(item,item.posx,item.posy);
-		}
-	});
+	// items.forEach(function (item) {
+	// 	item.onload = function () {
+	// 		ctx.drawImage(item,item.posx,item.posy);
+	// 	}
+	// });
 
 	$('img').click(function(){
 	    if ($(this).hasClass('isSelected')) {
 	   		$('.isSelected').removeClass('isSelected');
+	   		allFalse();
 	    } else {
-		   $('.isSelected').removeClass('isSelected');
-		   $(this).addClass('isSelected');
+		    $('.isSelected').removeClass('isSelected');
+		    allFalse();
+		    $(this).addClass('isSelected');
+		    console.log($(this).attr('id'));
+		    switch($(this).attr('id')) {
+				case 'road':
+					roadMode = true;
+					break;
+				case 'redcar':
+					carMode = true;
+					tempCar.carAngle = carAngle;
+					break;
+				case 'greycar':
+					// TODO
+					break;
+				case 'stoplight':
+					// TODO
+					break;
+				case 'delete':
+					// TODO
+					break;
+				default:
+					break;
+			}
 	    }
 	});
 });
@@ -130,7 +155,7 @@ function touchDown(event) {
 		}
 	} else if (carMode && event.targetTouches[0].pageY > 150) {
 		tempCar = new Image();
-		tempCar.src = "/assets/redcartop.png";
+		tempCar.src = "/assets/redcar.png";
 		tempCar.isCar = true;
 		tempCar.carAngle = carAngle;
 		items.push(tempCar);
@@ -144,32 +169,34 @@ function touchDown(event) {
 
 function mouseDown(event) {
 	Pos1.x = event.x;
-	Pos1.y = event.y;
-	drawStatics();
+	console.log(event.y + " - " + vOffset + " = ");
+	Pos1.y = event.y - vOffset;
+	console.log(Pos1.y);
+	// drawStatics();
 
-	if (isIn(event,roadImg)) {
-		allFalse();
-		roadMode = true;
-		$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
-	}
+	// if (isIn(event,roadImg)) {
+	// 	allFalse();
+	// 	roadMode = true;
+	// 	$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
+	// }
 
-	if (isIn(event,carImg)) {
-		if (carMode && event.y < 150) {
-			carAngle += Math.PI/4;
-			drawStatics();
-		} else {
-			$('#info').text("turning on");
-			allFalse();
-			carMode = true;
-			tempCar.carAngle = carAngle;
-			$(this).css('cursor', 'url(/assets/carcursor.png), auto');
-		}
-	}
+	// if (isIn(event,carImg)) {
+	// 	if (carMode && event.y < 150) {
+	// 		carAngle += Math.PI/4;
+	// 		drawStatics();
+	// 	} else {
+	// 		$('#info').text("turning on");
+	// 		allFalse();
+	// 		carMode = true;
+	// 		tempCar.carAngle = carAngle;
+	// 		$(this).css('cursor', 'url(/assets/carcursor.png), auto');
+	// 	}
+	// }
 
-	if (isIn(event,cancelImg)) {
-		allFalse();
-		$(this).css('cursor', 'auto');
-	}
+	// if (isIn(event,deleteImg)) {
+	// 	allFalse();
+	// 	$(this).css('cursor', 'auto');
+	// }
 }
 
 function mouseUp (event) {
@@ -205,7 +232,7 @@ function mouseUp (event) {
 
 	if (carMode && event.y > 150) {
 		tempCar = new Image();
-		tempCar.src = "/assets/redcartop.png";
+		tempCar.src = "/assets/redcar.png";
 		tempCar.isCar = true;
 		tempCar.carAngle = carAngle;
 		items.push(tempCar);
@@ -237,23 +264,23 @@ function setPos (element,x,y) {
 	element.posy = y;
 }
 
-function drawStatics() {
-	ctx.clearRect(0, 0, canvas.width, 150);
-	ctx.strokeRect(0,0,$(window).width(),150);
-	ctx.strokeRect(0,150,$(window).width(),$(window).height()-50);
-	ctx.drawImage(roadImg,roadImg.posx,roadImg.posy);
-	ctx.save();
-	ctx.translate(carImg.posx+carImg.width/2, carImg.posy+carImg.height/2);
-	ctx.rotate(carAngle);
-	ctx.translate(-(carImg.posx+carImg.width/2),-(carImg.posy+carImg.height/2));
-	ctx.drawImage(carImg,carImg.posx,carImg.posy);
-	ctx.restore();
-	ctx.drawImage(cancelImg,cancelImg.posx,cancelImg.posy);
-}
+// function drawStatics() {
+// 	ctx.clearRect(0, 0, canvas.width, 150);
+// 	ctx.strokeRect(0,0,$(window).width(),150);
+// 	ctx.strokeRect(0,150,$(window).width(),$(window).height()-50);
+// 	ctx.drawImage(roadImg,roadImg.posx,roadImg.posy);
+// 	ctx.save();
+// 	ctx.translate(carImg.posx+carImg.width/2, carImg.posy+carImg.height/2);
+// 	ctx.rotate(carAngle);
+// 	ctx.translate(-(carImg.posx+carImg.width/2),-(carImg.posy+carImg.height/2));
+// 	ctx.drawImage(carImg,carImg.posx,carImg.posy);
+// 	ctx.restore();
+// 	ctx.drawImage(deleteImg,deleteImg.posx,deleteImg.posy);
+// }
 
 function drawItems() {
+	ctx.translate(0, -vOffset);
 	items.forEach(function (item) {
-		console.log(item.posx);
 		if (item.isRoad) {
 			slope = (item.pos2.y-Pos1.y)/(item.pos2.x-Pos1.x);
 			angle = -Math.atan(slope);
@@ -268,7 +295,7 @@ function drawItems() {
 			ctx.stroke();
 			ctx.strokeStyle = '#000000';
 		} else if (item.isCar) {
-			console.log('t');
+			console.log(item.posx);
 			ctx.save();
 			ctx.translate(item.posx+item.width/2, item.posy+item.height/2);
 			ctx.rotate(item.carAngle);
@@ -279,6 +306,7 @@ function drawItems() {
 			ctx.drawImage(item,item.posx,item.posy);
 		}
 	});
+	ctx.translate(0, vOffset);
 }
 
 Array.prototype.remove = function (from, to) { // Remove element code snippet by John Resig, creator of jQuery
