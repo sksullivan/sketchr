@@ -25,7 +25,6 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-50;
 	canvas.addEventListener("mousedown", mouseDown, false);
-	canvas.addEventListener("mousemove", mouseMove, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", touchDown, false);
