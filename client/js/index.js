@@ -113,23 +113,16 @@ function touchDown(event) {
 			carMode = true;
 			tempCar.carAngle = carAngle;
 		}
-	}
-
-	if (carMode) {
-		if (isInTouch(event,carImg)) {
-			carAngle += Math.PI/4;
-			drawStatics();
-		} else if (event.y > 150) {
-			tempCar = new Image();
-			tempCar.src = "/assets/redcartop.png";
-			tempCar.isCar = true;
-			tempCar.carAngle = carAngle;
+	} else if (carMode && event.targetTouches[0].pageY > 150) {
+		tempCar = new Image();
+		tempCar.src = "/assets/redcartop.png";
+		tempCar.isCar = true;
+		tempCar.carAngle = carAngle;
+		items.push(tempCar);
+		tempCar.onload = function() {
 			items.push(tempCar);
-			tempCar.onload = function() {
-				items.push(tempCar);
-				setPos(tempCar,event.x-tempCar.width/2,event.y-tempCar.height/2);
-				drawItems();
-			}
+			setPos(tempCar,event.x-tempCar.width/2,event.y-tempCar.height/2);
+			drawItems();
 		}
 	}
 }
@@ -145,7 +138,6 @@ function mouseDown(event) {
 		$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
 	}
 
-	$('#info').text(carMode ? "YES" : "NO");
 	if (isIn(event,carImg)) {
 		if (carMode && event.y < 150) {
 			carAngle += Math.PI/4;
