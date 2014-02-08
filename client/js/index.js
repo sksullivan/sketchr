@@ -72,18 +72,22 @@ function mouseUp (event) {
 }
 
 function touchDown(event) {
+	event.preventDefault();
 	$('#info').text("T-DOWN "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 function touchMove (event) {
+	event.preventDefault();
 	$('#info').text("T-MOVING "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 function touchUp (event) {
+	event.preventDefault();
 	$('#info').text("T-UP "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
 function touchCancel (event) {
+	event.preventDefault();
 	$('#info').text("T-CANCEL "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 }
 
