@@ -73,23 +73,15 @@ function touchDown(event) {
 		road.isRoad = true;
 		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
 		//$('#info').text(Math.atan(slope));
-		if (Math.atan(slope)<.52 && Math.atan(slope)>-.25) {
+		if (Math.atan(slope)<.84) {
 			Pos1.y = (Pos2.y+Pos1.y)/2;
 			Pos2.y = Pos1.y;
-			//$('#info').text(Math.atan(slope));
-		} else if (Math.atan(slope)<1.05 && Math.atan(slope)>-1.05) {
-			if (Pos2.x > Pos1.x) {
-				ydiff = Pos2.y-Pos1.y;
-				Pos2.x = Pos1.x-ydiff;
-			} else {
-				ydiff = Pos2.y-Pos1.y;
-				Pos2.x = Pos1.x+ydiff;
-			}
-			//$('#info').text(Math.atan(slope));
+		} else if (Math.atan(slope)<1.19) {
+			ydiff = Pos2.y-Pos1.y;
+			Pos2.x = Pos1.x-ydiff;
 		} else {
 			Pos1.x = (Pos2.x+Pos1.x)/2;
 			Pos2.x = Pos1.x;
-			//$('#info').text(Math.atan(slope));
 		}
 		road.pos1 = Pos1;
 		road.pos2 = Pos2;
