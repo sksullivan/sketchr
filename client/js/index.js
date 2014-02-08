@@ -59,7 +59,7 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	$('#info').text("POW "+event.x+","+event.y);
+	$('#info').text("POW "+event.targetTouches[0].pageX+","+event.targetTouches[0].pageY);
 	if (roadMode) {
 		roadPos1.x = event.x;
 		roadPos1.y = event.y;
