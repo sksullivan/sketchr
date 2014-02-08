@@ -59,7 +59,7 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
-	if (isIn(event,roadImage)) {
+	if (isIn(event,roadImg)) {
 		roadMode = true;
 	}
 	if (roadMode) {
