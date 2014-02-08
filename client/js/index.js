@@ -60,43 +60,48 @@ $(document).ready(function () {
 
 function touchDown(event) {
 	event.preventDefault();
+	if (isIn(event,roadImage)) {
+		roadMode = true;
+	}
+	if (roadMode) {
+		if (Pos1.x == 0 && Pos1.y == 0) {
+			$('#info').text("set first");
+			Pos1.x = event.targetTouches[0].pageX;
+			Pos1.y = event.targetTouches[0].pageY;
+		} else {
+			Pos2.x = event.targetTouches[0].pageX;
+			Pos2.y = event.targetTouches[0].pageY;
 
-	if (Pos1.x == 0 && Pos1.y == 0) {
-		$('#info').text("set first");
-		Pos1.x = event.targetTouches[0].pageX;
-		Pos1.y = event.targetTouches[0].pageY;
-	} else {
-		Pos2.x = event.targetTouches[0].pageX;
-		Pos2.y = event.targetTouches[0].pageY;
-
-		road = new Object();
-		road.isRoad = true;
-		slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
-		angle = -Math.atan(slope)/Math.PI*180;
-		if (angle > 55) {
-			Pos1.x = (Pos2.x+Pos1.x)/2;
-			Pos2.x = Pos1.x;
-		} else if (angle > 35) {
-			ydiff = Pos2.y-Pos1.y;
-			Pos2.x = Pos1.x-ydiff;
-		} else if (angle > -35) {
-			Pos1.y = (Pos2.y+Pos1.y)/2;
-			Pos2.y = Pos1.y;
-		} else if (angle > -55) {
-			ydiff = Pos2.y-Pos1.y;
-			Pos2.x = Pos1.x+ydiff;
-		} else { 
-			Pos1.x = (Pos2.x+Pos1.x)/2;
-			Pos2.x = Pos1.x;
+			road = new Object();
+			road.isRoad = true;
+			slope = (Pos2.y-Pos1.y)/(Pos2.x-Pos1.x);
+			angle = -Math.atan(slope)/Math.PI*180;
+			if (angle > 55) {
+				Pos1.x = (Pos2.x+Pos1.x)/2;
+				Pos2.x = Pos1.x;
+			} else if (angle > 35) {
+				ydiff = Pos2.y-Pos1.y;
+				Pos2.x = Pos1.x-ydiff;
+			} else if (angle > -35) {
+				Pos1.y = (Pos2.y+Pos1.y)/2;
+				Pos2.y = Pos1.y;
+			} else if (angle > -55) {
+				ydiff = Pos2.y-Pos1.y;
+				Pos2.x = Pos1.x+ydiff;
+			} else { 
+				Pos1.x = (Pos2.x+Pos1.x)/2;
+				Pos2.x = Pos1.x;
+			}
+			road.pos1 = Pos1;
+			road.pos2 = Pos2;
+			items.push(road);
+			drawItems();
+			Pos1.x = 0;
+			Pos1.y = 0;
+			Pos2.x = 0;
+			Pos2.y = 0;
+			roadMode = false;
 		}
-		road.pos1 = Pos1;
-		road.pos2 = Pos2;
-		items.push(road);
-		drawItems();
-		Pos1.x = 0;
-		Pos1.y = 0;
-		Pos2.x = 0;
-		Pos2.y = 0;
 	}
 }
 
@@ -127,10 +132,6 @@ function mouseDown(event) {
 function allFalse() {
 	roadMode = false;
 	carMode = false;
-}
-
-function mouseMove (event) {
-	// todo?
 }
 
 function mouseUp (event) {
