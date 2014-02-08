@@ -261,8 +261,8 @@ function drawItems() {
 			ctx.lineTo(item.pos2.x+Math.cos(angle)*30, item.pos2.y-Math.sin(angle)*30);
 			ctx.lineWidth=130;
 			ctx.stroke();
-			ctx.moveTo(item.pos1.x, item.pos1.y);
-			ctx.lineTo(item.pos2.x, item.pos2.y);
+			ctx.moveTo(item.pos1.x-Math.cos(angle)*30, item.pos1.y+Math.sin(angle)*30);
+			ctx.lineTo(item.pos2.x+Math.cos(angle)*30, item.pos2.y-Math.sin(angle)*30);
 			ctx.strokeStyle = '#FFFF00'
 			ctx.lineWidth=10;
 			ctx.stroke();
