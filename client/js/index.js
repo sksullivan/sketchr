@@ -4,6 +4,7 @@ var roadImg, carImg, cancelImg;
 var items = [];
 var ctx,diffx,diffy;
 var roadMode = false;
+var carMode = false;
 
 var Pos1 = new Object();
 var Pos2 = new Object();
@@ -49,23 +50,23 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
-	if (roadMode) {
-		Pos1.x = event.x;
-		Pos1.y = event.y;
-	}
+	Pos1.x = event.x;
+	Pos1.y = event.y;
 
 	if (isIn(event,carImg)) {
-		$(this).css('cursor', 'url(/assets/redcartop.png), auto');
+		roadMode = false;
+		carMode = true;
+		$(this).css('cursor', 'url(/assets/carcursor.png), auto');
 	}
 
 	if (isIn(event,roadImg)) {
 		roadMode = true;
-		$(this).css('cursor', 'url(/assets/road.png), auto');
+		$(this).css('cursor', 'url(/assets/roadcursor.png), auto');
 	}
 
 	if (isIn(event,cancelImg)) {
 		roadMode = false;
-		$(this).css('cursor', 'url(/assets/cancel.png), auto');
+		$(this).css('cursor', 'auto');
 	}
 
 	console.log(event.x+", "+event.y);
