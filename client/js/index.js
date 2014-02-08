@@ -60,11 +60,6 @@ $(document).ready(function () {
 function touchDown(event) {
 	event.preventDefault();
 	//$('#info').text(roadMode ? "YES" : "NO");
-	if (isInTouch(event,roadImg)) {
-		roadMode = true;
-	} else if (isInTouch(event,carImg)) {
-
-	}
 
 	if (roadMode) {
 		if (Pos1.x == 0 && Pos1.y == 0) {
@@ -104,6 +99,12 @@ function touchDown(event) {
 			Pos2.y = 0;
 			roadMode = false;
 		}
+	}
+
+	if (isInTouch(event,roadImg)) {
+		roadMode = true;
+	} else if (isInTouch(event,carImg)) {
+
 	}
 }
 
