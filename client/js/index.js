@@ -22,9 +22,9 @@ $(document).ready(function () {
 	var cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height()-50;
-	canvas.addEventListener("mousedown", mouseDown, false);
-	canvas.addEventListener("mousemove", mouseMove, false);
-	canvas.addEventListener("mouseup", mouseUp, false);
+	canvas.addEventListener("pointerdown", mouseDown, false);
+	canvas.addEventListener("pointermove", mouseMove, false);
+	canvas.addEventListener("pointerup", mouseUp, false);
 
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchmove", mouseMove, true);
@@ -55,6 +55,7 @@ $(document).ready(function () {
 // Mouse Events
 
 function mouseDown(event) {
+	$('#info').text("POW");
 	if (roadMode) {
 		roadPos1.x = event.x;
 		roadPos1.y = event.y;
