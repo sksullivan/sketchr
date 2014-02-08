@@ -40,10 +40,6 @@ DrawItem.prototype.onMouseDown = function () {
 	$('#info').text("pressed a draw");
 }
 
-DrawItem.prototype.onMouseUp = function () {
-	
-}
-
 DrawItem.prototype.rotate = function (amount) {
 	this.heading += amount;
 }
@@ -56,7 +52,7 @@ DrawItem.prototype.move = function (x,y) {
 DrawItem.prototype.displayMenu = function () {
 	ctx.translate(0,0);
 	context.beginPath();
-	context.rect(188, 50, 200, 100);
+	context.rect(40, 50, 200, 100);
 	context.fillStyle = 'yellow';
 	context.fill();
 	context.lineWidth = 7;
@@ -280,7 +276,7 @@ $(document).ready(function () {
 	carGenerator = new CarGenerator(1/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/redcar.png","the car generator",ctx);
 	uCarGenerator = new UCarGenerator(1/10*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/graycar.png","the uninvolved car generator",ctx);
 	roadGenerator = new RoadGenerator(19/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
-	northGenerator = new NorthGenerator(29/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/road.png","the road generator",ctx);
+	northGenerator = new NorthGenerator(29/100*cvs.width,1/70*cvs.height,0,cvs.width/2500,"/assets/arrowU.png","the north generator",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
