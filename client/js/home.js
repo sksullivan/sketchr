@@ -368,12 +368,12 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
-	('#info').text(event.targetTouches[0].x+" MOVE "+event.targetTouches[0].y);
+	$('#info').text(event.targetTouches[0].x+" MOVE "+event.targetTouches[0].y);
 }
 
 function mouseDragDown (event) {
 	event.preventDefault();
-	('#info').text(event.targetTouches[0].x+" START "+event.targetTouches[0].y);
+	$('#info').text(event.targetTouches[0].x+" START "+event.targetTouches[0].y);
 }
 
 function mouseDown (event) {
