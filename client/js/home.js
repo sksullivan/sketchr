@@ -443,10 +443,10 @@ function mouseEnd (event) {
 }
 
 function mouseUp (event) {
-	if (placeMode == "rotating") {
-		console.log("fired");
-		placeMode = null;
-	}
+	//if (placeMode == "rotating") {
+	//	console.log("fired");
+	//	placeMode = null;
+	//}
 }
 
 function mouseDown (event) {
