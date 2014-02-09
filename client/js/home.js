@@ -25,7 +25,14 @@ DrawItem.prototype.draw = function () {
 	ctx.rotate(this.heading/180*Math.PI);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 	ctx.drawImage(this.image,this.x,this.y, this.size * this.image.width, this.size * this.image.height);
+	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
+	ctx.rotate(-this.heading/180*Math.PI);
 	ctx.restore();
+	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
+	ctx.font="13px Arial";
+	ctx.fillStyle = 'white';
+	ctx.fillText(this.name,-50,0);
+	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
 
 DrawItem.prototype.contains = function (event) {
@@ -34,10 +41,6 @@ DrawItem.prototype.contains = function (event) {
 		event.y = event.targetTouches[0].pageY;
 	}
 	return event.y < this.y+this.size*this.height && event.y > this.y && event.x < this.x+this.size*this.width && event.x > this.x;
-}
-
-DrawItem.prototype.onMouseDown = function () {
-	$('#info').text("pressed a draw");
 }
 
 DrawItem.prototype.rotate = function (amount) {
@@ -103,13 +106,8 @@ DrawItem.prototype.displayMenu = function (event) {
 	labelItem = new MenuItem(event.x,event.y+5,60,30,function () {
 		label = prompt("Enter a name.");
 		selected.name = label;
-		var username = new CanvasText( canvas, {
-			x: 'center',
-			y: 120,
-			width: 300,
-			placeholder: 'Enter a name...'
-		});
-		console.log(selected.name);
+		dismissMenu();
+		redraw();
 	}, function () {
 		ctx.translate(0,5);
 		ctx.beginPath();
@@ -129,8 +127,6 @@ DrawItem.prototype.displayMenu = function (event) {
 	menuItems.push(moveItem);
 	menuItems.push(labelItem);
 	redraw();
-
-	
 }
 
 // Road Class
@@ -341,6 +337,8 @@ menuY = 0;
 ctx = null;
 cvs = null;
 
+primaryCars = [];
+
 placeMode = null;
 carGenerator = null;
 uCarGenerator = null;
@@ -355,10 +353,10 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
-	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","the car generator",ctx);
-	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","the uninvolved car generator",ctx);
-	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","the road generator",ctx);
-	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrowU.png","the north generator",ctx);
+	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
+	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
+	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
+	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrowU.png","",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
@@ -375,9 +373,7 @@ function mouseDown (event) {
 	event.preventDefault();
 	if (menuItems.length > 0) {
 		for (i=0;i<menuItems.length;i++) {
-			console.log("foiund");
 			if (menuItems[i].contains(event)) {
-				console.log("foiundINGING");
 				menuItems[i].onMouseDown();
 				return;
 			}
@@ -397,7 +393,7 @@ function mouseDown (event) {
 	}
 	switch (placeMode) {
 		case "car":
-			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","the car",this.ctx);
+			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","a normal car",this.ctx);
 			drawItemList.push(car);
 			break;
 		case "uCar":
@@ -437,11 +433,11 @@ function mouseDown (event) {
 			tempRoad.y2 = y2;
 			drawItemList.push(tempRoad);
 			placeMode = "road";
+			redraw();
 			break;
 		default:
 			break;
 	}
-	redraw();
 }
 
 function redraw () {
