@@ -455,6 +455,7 @@ function mouseDown (event) {
 	if (menuItems.length > 0) {
 		for (i=0;i<menuItems.length;i++) {
 			if (menuItems[i].contains(event)) {
+				console.log("sigh");
 				menuItems[i].onMouseDown();
 				return;
 			}
