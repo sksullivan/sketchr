@@ -372,10 +372,10 @@ function mouseDrag (event) {
 	if (placeMode != "rotating") {
 		return;
 	};
-	angle = Math.atan((event.targetTouches[0].pageY-selected.y+selected.height/2)/(event.targetTouches[0].pageX-selected.x+selected.width/2))/Math.PI*180;
+	angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
 	console.log(angle);
 	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
-		angle += 180;
+		//angle += 180;
 	}
 	selected.heading = angle;
 	redraw();
