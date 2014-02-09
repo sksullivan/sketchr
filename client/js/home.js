@@ -411,6 +411,7 @@ $(document).ready(function () {
 });
 
 function mouseDragMobile (event) {
+	$('#info').text("DRAGGING");
 	event.preventDefault();
 	if (placeMode != "rotating") {
 		return;
@@ -436,6 +437,7 @@ function mouseDrag (event) {
 }
 
 function mouseEnd (event) {
+	$('#info').text("END");
 	console.log("fired");
 	placeMode = null;
 }
@@ -448,6 +450,7 @@ function mouseUp (event) {
 }
 
 function mouseDown (event) {
+	$('#info').text("DOWN");
 	event.preventDefault();
 	if (menuItems.length > 0) {
 		for (i=0;i<menuItems.length;i++) {
