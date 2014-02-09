@@ -348,7 +348,7 @@ $(document).ready(function () {
 	// Initialize scene and Draw Items
 	cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
-	cvs.height  = $(window).height();
+	cvs.height  = $(window).height()-20;
 	ctx = document.getElementById('canvas').getContext('2d');
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
