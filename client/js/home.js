@@ -357,6 +357,7 @@ NorthGenerator.prototype.onMouseDown = function () {
 
 // Setup and Main code
 
+generatorList = [];
 drawItemList = [];
 menuItems = [];
 menuX = 0;
@@ -384,10 +385,10 @@ $(document).ready(function () {
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
 	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"",ctx);
-	drawItemList.push(carGenerator);
-	drawItemList.push(uCarGenerator);
-	drawItemList.push(roadGenerator);
-	drawItemList.push(northGenerator);
+	generatorList.push(carGenerator);
+	generatorList.push(uCarGenerator);
+	generatorList.push(roadGenerator);
+	generatorList.push(northGenerator);
 	$('#info').text("Nope");
 	canvas.addEventListener("touchmove", mouseDragMobile, false);
 	canvas.addEventListener("mousemove", mouseDrag, false);
@@ -453,6 +454,17 @@ function mouseDown (event) {
 		// menu is open but click was elsewhere
 		dismissMenu();
 		redraw();
+		for (i=0;i<generatorList.length;i++) {
+			if (generatorList[i].contains(event) && generatorList[i].toString() != 'Road') {
+				if (!generatorList[i].isGenerator) {
+					generatorList[i].displayMenu(event);
+					selected = generatorList[i];
+				} else {
+					generatorList[i].onMouseDown();
+				}
+				return;
+			}
+		}
 		for (i=0;i<drawItemList.length;i++) {
 			if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
 				if (!drawItemList[i].isGenerator) {
@@ -465,6 +477,18 @@ function mouseDown (event) {
 			}
 		}
 		return;
+	}
+
+	for (i=0;i<generatorList.length;i++) {
+		if (generatorList[i].contains(event) && generatorList[i].toString() != 'Road') {
+			if (!generatorList[i].isGenerator) {
+				generatorList[i].displayMenu(event);
+				selected = generatorList[i];
+			} else {
+				generatorList[i].onMouseDown();
+			}
+			return;
+		}
 	}
 
 	for (i=0;i<drawItemList.length;i++) {
@@ -534,23 +558,31 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
+	
+	console.log(drawItemList);
+	drawItemList.forEach(function (drawItem) {
+		drawItem.draw();
+	});
+	
+	ctx.translate(event.x,event.y);
+	menuItems.forEach(function (menuItem) {
+		menuItem.draw();
+	});
+	ctx.translate(-event.x,-event.y);
+	
 	ctx.fillStyle = '#FFFFFF';
 	ctx.fillRect(0, 0, cvs.width, cvs.width/1600*160);
+	
 	ctx.beginPath();
 	ctx.moveTo(0, cvs.width/1600*160);
 	ctx.lineTo(cvs.width, cvs.width/1600*160);
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#000000';
 	ctx.stroke();
-	console.log(drawItemList);
-	drawItemList.forEach(function (drawItem) {
+	
+	generatorList.forEach(function (drawItem) {
 		drawItem.draw();
 	});
-	ctx.translate(event.x,event.y);
-	menuItems.forEach(function (menuItem) {
-		menuItem.draw();
-	});
-	ctx.translate(-event.x,-event.y);
 }
 
 // Other Methods
