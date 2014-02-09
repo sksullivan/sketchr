@@ -28,7 +28,11 @@ DrawItem.prototype.draw = function () {
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
-	ctx.fillText(this.name,-this.image.width/4,this.image.height*1.2);
+	if (this.name == "N") {
+		ctx.fillText(this.name,-this.image.width/4,this.image.height*1.2);
+	} else {
+		ctx.fillText(this.name,-this.image.width/20,this.image.height/6);
+	}
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
  	
