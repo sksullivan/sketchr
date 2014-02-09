@@ -361,8 +361,6 @@ $(document).ready(function () {
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDragDown, false);
-	//canvas.addEventListener("touchend", mouseEnd, false);
-	//canvas.addEventListener("touchcancel", mouseCancel, false);
 	canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
@@ -377,15 +375,6 @@ function mouseDragDown (event) {
 	event.preventDefault();
 	$('#info').text(event.targetTouches[0].pageX+" START "+event.targetTouches[0].pageX);
 }
-
-/*function mouseEnd (event) {
-	event.preventDefault();
-	$('#info').text(event.targetTouches[0].pageX+" END "+event.targetTouches[0].pageY);
-}*/
-
-/*function mouseCancel (event) {
-	$('#info').text(event.targetTouches[0].pageX+" CANCEL "+event.targetTouches[0].pageY);
-}*/
 
 function mouseDown (event) {
 	event.preventDefault();
