@@ -361,7 +361,7 @@ $(document).ready(function () {
 
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
-	//canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
@@ -369,11 +369,6 @@ $(document).ready(function () {
 function mouseDrag (event) {
 	event.preventDefault();
 	$('#info').text(event.targetTouches[0].pageX+" MOVE "+event.targetTouches[0].pageY);
-}
-
-function mouseDragDown (event) {
-	event.preventDefault();
-	$('#info').text(event.targetTouches[0].pageX+" START "+event.targetTouches[0].pageX);
 }
 
 function mouseDown (event) {
