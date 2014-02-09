@@ -29,7 +29,7 @@ DrawItem.prototype.draw = function () {
 	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
 	if (this.name == "N") {
-		ctx.fillText(this.name,-this.image.width/4,this.image.height*1.2);
+		ctx.fillText(this.name,this.image.width,this.image.height/4);
 	} else {
 		ctx.fillText(this.name,-this.image.width/20,this.image.height/6);
 	}
@@ -369,7 +369,7 @@ function ForceGenerator (x,y,heading,size,imageName,name,ctx) {
 ForceGenerator.prototype = new Generator();
 
 ForceGenerator.prototype.onMouseDown = function () {
-		placeMode = "force";
+	placeMode = "force";
 }
 
 // Setup and Main code
@@ -402,7 +402,7 @@ $(document).ready(function () {
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
 	forceGenerator = new ForceGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/force.png","",ctx);
-	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1800*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1800,"/assets/arrow.png","N",ctx);
+	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1000*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1000,"/assets/arrow.png","N",ctx);
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
 	generatorList.push(roadGenerator);
@@ -429,16 +429,23 @@ $(document).ready(function () {
 
 function mouseDragMobile (event) {
 	event.preventDefault();
-	if (placeMode != "rotating") {
-		return;
-	};
-	angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
-	console.log(angle);
-	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
-		angle = 180+angle;
+	if (placeMode == "rotating") {
+		angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
+		console.log(angle);
+		if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
+			angle = 180+angle;
+		}
+		selected.heading = angle;
+		redraw();
 	}
-	selected.heading = angle;
-	redraw();
+
+	if (placeMode == "force") {
+		// Add (event.x, event.y) to array
+	    if (mousedown) {
+	        ctx.lineTo(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+	        ctx.stroke();
+	    }
+	}
 }
 
 function mouseDrag (event) {
@@ -450,16 +457,26 @@ function mouseDrag (event) {
 		selected.heading = angle;
 		redraw();
 	}
+
+	if (placeMode == "force") {
+		// Add (event.x, event.y) to array
+	    if (mousedown) {
+	        ctx.lineTo(event.x, event.y);
+	        ctx.stroke();
+	    }
+	}
 }
 
 function mouseEnd (event) {
 	if (placeMode == "rotating") {
  		placeMode = null;
  	}
+ 	mousedown = false;
  }
 
 var doubleClickThreshold = 450;  //ms
 var lastClick = 0;
+var mousedown = false;
 
 function mouseDown (event) {
 	event.preventDefault();
@@ -541,6 +558,13 @@ function mouseDown (event) {
 			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","",this.ctx);
 			drawItemList.push(uCar);
 			break;
+		case "force":
+			ctx.strokeStyle = '#FF0000';
+			ctx.lineWidth = cvs.width/200;
+		    mousedown = true;
+		    ctx.beginPath();
+		    ctx.moveTo(event.x, event.y);
+		    break;
 		case "road":
 			tempRoad = new Road(event.x,event.y,0,0,cvs.width/15,"road",this.ctx);
 			placeMode = "road2";
