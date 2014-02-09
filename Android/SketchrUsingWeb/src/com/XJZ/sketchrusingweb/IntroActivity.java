@@ -7,6 +7,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class IntroActivity extends Activity implements OnClickListener {
@@ -26,12 +30,25 @@ public class IntroActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.);
+        
+        //String pathToPic = "/res/drawable/chicago.jpg";
+        //Drawable pic = Drawable.createFromPath(pathToPic);
+        
         TextView titleView = (TextView)findViewById(R.id.title);
-        titleView.setTextSize(50);
+        titleView.setTextSize(40);
         
         Button buttonNew = (Button)findViewById(R.id.btnNew);
         //buttonNew.setBackgroundColor(color.holo_purple);
         buttonNew.setOnClickListener(this);
+        
+        Button buttonExisting = (Button)findViewById(R.id.btnExisting);
+        
+        ImageView background = (ImageView)findViewById(R.id.background);
+        
+        titleView.bringToFront();
+        buttonNew.bringToFront();
+        buttonExisting.bringToFront();
 	}
 
 	@Override
