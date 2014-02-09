@@ -376,7 +376,7 @@ function mouseDrag (event) {
 	console.log(angle);
 	$('#info').text("_____")
 	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
-		$('#info').text("!!!!!");
+		angle = 180+angle;
 	}
 	selected.heading = angle;
 	redraw();
