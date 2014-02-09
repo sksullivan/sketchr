@@ -28,7 +28,7 @@ DrawItem.prototype.draw = function () {
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
-	ctx.fillText(this.name,-35,+5);
+	ctx.fillText(this.name,-this.image.width/20,this.image.height/6);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
 
@@ -110,7 +110,7 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	labelItem = new MenuItem(event.x,event.y+5,60,30,function () {
-		label = prompt("Enter a name.");
+		label = prompt("Enter a new name");
 		selected.name = label;
 		dismissMenu();
 		redraw();
@@ -168,7 +168,7 @@ Road.prototype.contains = function (event) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
 	}
-	return event.y < this.y+this.height/2 && event.y > this.y-this.height/2 && event.x < this.x+this.width/2 && event.x > this.x-this.width/2;
+	return event.y < this.y+this.height/2 + 500/cvs.height && event.y > this.y-this.height/2 - 500/cvs.height && event.x < this.x+this.width/2 + 200/cvs.width && event.x > this.x-this.width/2 - 200/cvs.width;
 }
 
 Road.prototype.draw = function () {
@@ -192,18 +192,16 @@ Road.prototype.draw = function () {
 	if (this.width == this.size) {
 		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
 		ctx.rotate(-Math.PI/2);
-		ctx.textAlign="end"; 
 		ctx.font="48px Arial";
-		ctx.fillStyle = 'black';
-		ctx.fillText(this.name,0,-this.width/2-5);
+		ctx.fillStyle = 'white';
+		ctx.fillText(this.name,-this.height/2,-this.width/1.25);
 		ctx.rotate(Math.PI/2);
 		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
 	} else {
 		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
-		ctx.textAlign="end"; 
 		ctx.font="48px Arial";
-		ctx.fillStyle = 'black';
-		ctx.fillText(this.name,0,-this.height/2-5);
+		ctx.fillStyle = 'white';
+		ctx.fillText(this.name,-this.width/2,-this.height/1.25);
 		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
 	}
 }
@@ -359,6 +357,7 @@ NorthGenerator.prototype.onMouseDown = function () {
 
 // Setup and Main code
 
+generatorList = [];
 drawItemList = [];
 menuItems = [];
 menuX = 0;
@@ -386,20 +385,22 @@ $(document).ready(function () {
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
 	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"",ctx);
-	drawItemList.push(carGenerator);
-	drawItemList.push(uCarGenerator);
-	drawItemList.push(roadGenerator);
-	drawItemList.push(northGenerator);
+	generatorList.push(carGenerator);
+	generatorList.push(uCarGenerator);
+	generatorList.push(roadGenerator);
+	generatorList.push(northGenerator);
 	$('#info').text("Nope");
-	canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchmove", mouseDragMobile, false);
+	canvas.addEventListener("mousemove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchend", mouseEnd, false);
+	canvas.addEventListener("mouseup", mouseEnd, false);
 
 	redraw();
 });
 
-function mouseDrag (event) {
+function mouseDragMobile (event) {
 	event.preventDefault();
 	if (placeMode != "rotating") {
 		return;
@@ -425,10 +426,12 @@ function mouseDrag (event) {
 }
 
 function mouseEnd (event) {
-	// placeMode = null;
-}
+	if (placeMode == "rotating") {
+ 		placeMode = null;
+ 	}
+ }
 
-var doubleClickThreshold = 500;  //ms
+var doubleClickThreshold = 450;  //ms
 var lastClick = 0;
 
 function mouseDown (event) {
@@ -451,6 +454,17 @@ function mouseDown (event) {
 		// menu is open but click was elsewhere
 		dismissMenu();
 		redraw();
+		for (i=0;i<generatorList.length;i++) {
+			if (generatorList[i].contains(event) && generatorList[i].toString() != 'Road') {
+				if (!generatorList[i].isGenerator) {
+					generatorList[i].displayMenu(event);
+					selected = generatorList[i];
+				} else {
+					generatorList[i].onMouseDown();
+				}
+				return;
+			}
+		}
 		for (i=0;i<drawItemList.length;i++) {
 			if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
 				if (!drawItemList[i].isGenerator) {
@@ -463,6 +477,18 @@ function mouseDown (event) {
 			}
 		}
 		return;
+	}
+
+	for (i=0;i<generatorList.length;i++) {
+		if (generatorList[i].contains(event) && generatorList[i].toString() != 'Road') {
+			if (!generatorList[i].isGenerator) {
+				generatorList[i].displayMenu(event);
+				selected = generatorList[i];
+			} else {
+				generatorList[i].onMouseDown();
+			}
+			return;
+		}
 	}
 
 	for (i=0;i<drawItemList.length;i++) {
@@ -482,14 +508,14 @@ function mouseDown (event) {
 			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","",this.ctx);
 			drawItemList.push(car);
 			primaryCars.push(car);
-			car.name = primaryCars.indexOf(car)+1
+			car.name = primaryCars.indexOf(car)+1;
 			break;
 		case "uCar":
 			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","",this.ctx);
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"road",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,cvs.width/15,"road",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
@@ -520,6 +546,7 @@ function mouseDown (event) {
 			tempRoad.x2 = x2;
 			tempRoad.y2 = y2;
 			tempRoad.setSize();
+			tempRoad.name = prompt("Enter the street name");
 			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
@@ -531,23 +558,31 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
+	
+	console.log(drawItemList);
+	drawItemList.forEach(function (drawItem) {
+		drawItem.draw();
+	});
+	
+	ctx.translate(event.x,event.y);
+	menuItems.forEach(function (menuItem) {
+		menuItem.draw();
+	});
+	ctx.translate(-event.x,-event.y);
+	
 	ctx.fillStyle = '#FFFFFF';
 	ctx.fillRect(0, 0, cvs.width, cvs.width/1600*160);
+	
 	ctx.beginPath();
 	ctx.moveTo(0, cvs.width/1600*160);
 	ctx.lineTo(cvs.width, cvs.width/1600*160);
 	ctx.lineWidth = 10;
 	ctx.strokeStyle = '#000000';
 	ctx.stroke();
-	console.log(drawItemList);
-	drawItemList.forEach(function (drawItem) {
+	
+	generatorList.forEach(function (drawItem) {
 		drawItem.draw();
 	});
-	ctx.translate(event.x,event.y);
-	menuItems.forEach(function (menuItem) {
-		menuItem.draw();
-	});
-	ctx.translate(-event.x,-event.y);
 }
 
 // Other Methods
