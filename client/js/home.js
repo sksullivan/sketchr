@@ -20,18 +20,15 @@ function DrawItem (x,y,heading,size,imageName,name,ctx) {
 }
 
 DrawItem.prototype.draw = function () {
-	ctx.save();
-	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
+	ctx.translate(this.x+this.size*this.image.width/2, this.y+this.size*this.image.height/2);
 	ctx.rotate(this.heading/180*Math.PI);
-	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
-	ctx.drawImage(this.image,this.x,this.y, this.size * this.image.width, this.size * this.image.height);
-	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
+	ctx.drawImage(this.image,-this.size*this.image.width/2,-this.size*this.image.height/2, this.size * this.image.width, this.size * this.image.height);
 	ctx.rotate(-this.heading/180*Math.PI);
-	ctx.restore();
+	ctx.translate(-(this.x+this.size*this.image.width/2), -(this.y+this.size*this.image.height/2));
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
-	ctx.font="13px Arial";
+	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
-	ctx.fillText(this.name,-50,0);
+	ctx.fillText(this.name,-35,+5);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
 
@@ -69,6 +66,13 @@ DrawItem.prototype.displayMenu = function (event) {
 	menuY = event.y;
 	deleteItem = new MenuItem(event.x-45,event.y-40,60,30,function () {
 		drawItemList.remove(drawItemList.indexOf(selected));
+		var tempIndex = primaryCars.indexOf(selected);
+		if (tempIndex != -1) {
+			primaryCars.remove(tempIndex);
+			for (i=tempIndex;i<primaryCars.length;i++) {
+				primaryCars[i].name = i+1;
+			}
+		}
 		dismissMenu();
 		redraw();
 	}, function () {
@@ -87,7 +91,8 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	moveItem = new MenuItem(event.x+45,event.y-40,60,30,function () {
-		moving = selected;
+		placeMode = "rotating";
+		dismissMenu();
 	}, function () {
 		ctx.translate(45,-40);
 		ctx.beginPath();
@@ -99,7 +104,7 @@ DrawItem.prototype.displayMenu = function (event) {
 		ctx.stroke();
 		ctx.font="12px Arial";
 		ctx.fillStyle = 'black';
-		ctx.fillText("Move",10,20);
+		ctx.fillText("Rotate",10,20);
 		ctx.translate(-45,40);
 	});
 
@@ -137,15 +142,20 @@ function Road (x,y,x2,y2,size,name,ctx) {
 	this.size = size;
 	this.x2 = x2;
 	this.y2 = y2;
-	if (this.x2-this.x > 0) {
+	this.width = 0;
+	this.height = 0;
+	this.ctx = ctx;
+	this.name = name;
+}
+
+Road.prototype.setSize = function () {
+	if (this.x2 != this.x) {
 		this.width = Math.abs(this.x2-this.x);
 		this.height = this.size;
 	} else {
 		this.width = this.size;
 		this.height = Math.abs(this.y2-this.y);
 	}
-	this.ctx = ctx;
-	this.name = name;
 }
 
 Road.prototype.onMouseDown = function () {
@@ -177,6 +187,24 @@ Road.prototype.draw = function () {
 	ctx.setLineDash([this.size/2,this.size/4]);
 	ctx.stroke();
 	ctx.setLineDash([cvs.width+cvs.height]);
+
+	if (this.width == this.size) {
+		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
+		ctx.rotate(-Math.PI/2);
+		ctx.textAlign="end"; 
+		ctx.font="48px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText(this.name,0,-this.width/2-5);
+		ctx.rotate(Math.PI/2);
+		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
+	} else {
+		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
+		ctx.textAlign="end"; 
+		ctx.font="48px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText(this.name,0,-this.height/2-5);
+		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
+	}
 }
 
 Road.prototype.toString = function () {
@@ -351,7 +379,7 @@ $(document).ready(function () {
 	// Initialize scene and Draw Items
 	cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
-	cvs.height  = $(window).height();
+	cvs.height  = $(window).height()-20;
 	ctx = document.getElementById('canvas').getContext('2d');
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
@@ -361,10 +389,11 @@ $(document).ready(function () {
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
-
+	$('#info').text("Nope");
+	canvas.addEventListener("touchmove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
-	//canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchend", mouseEnd, false);
 
 	var doubleClickThreshold = 50;  //ms
 	var lastClick = 0;
@@ -378,6 +407,25 @@ $(document).ready(function () {
 
 	redraw();
 });
+
+function mouseDrag (event) {
+	event.preventDefault();
+	if (placeMode != "rotating") {
+		return;
+	};
+	angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
+	console.log(angle);
+	$('#info').text("_____")
+	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
+		angle = 180+angle;
+	}
+	selected.heading = angle;
+	redraw();
+}
+
+function mouseEnd (event) {
+	placeMode = null;
+}
 
 function mouseDown (event) {
 	event.preventDefault();
@@ -403,15 +451,17 @@ function mouseDown (event) {
 	}
 	switch (placeMode) {
 		case "car":
-			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","a normal car",this.ctx);
+			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","",this.ctx);
 			drawItemList.push(car);
+			primaryCars.push(car);
+			car.name = primaryCars.indexOf(car)+1
 			break;
 		case "uCar":
-			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","the car",this.ctx);
+			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","",this.ctx);
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"/assets/road.png","the road",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,130,"EPIC ROAD",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
@@ -441,7 +491,8 @@ function mouseDown (event) {
 			tempRoad.y = y1;
 			tempRoad.x2 = x2;
 			tempRoad.y2 = y2;
-			drawItemList.push(tempRoad);
+			tempRoad.setSize();
+			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
 			break;
