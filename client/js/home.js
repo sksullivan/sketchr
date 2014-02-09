@@ -360,6 +360,16 @@ $(document).ready(function () {
 	canvas.addEventListener("touchstart", mouseDown, false);
 	//canvas.addEventListener("touchmove", mouseDrag, false);
 
+	var doubleClickThreshold = 50;  //ms
+	var lastClick = 0;
+
+	$node = ("#canvas");
+	$node.click(function(){
+		var thisClick = new Date().getTime();
+		var isDoubleClick = thisClick - lastClick < doubleClickThreshold;
+		lastClick = thisClick;
+	});
+
 	redraw();
 });
 
