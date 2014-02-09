@@ -79,6 +79,7 @@ DrawItem.prototype.displayMenu = function (event) {
 		}
 		dismissMenu();
 		redraw();
+		drawCurves();
 	}, function () {
 		ctx.translate(-45,-40);
 		ctx.beginPath();
@@ -137,6 +138,7 @@ DrawItem.prototype.displayMenu = function (event) {
 	menuItems.push(moveItem);
 	menuItems.push(labelItem);
 	redraw();
+	drawCurves();
 }
 
 // Road Class
@@ -253,6 +255,7 @@ CarGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "car") {
 		this.rotate(45);
 		redraw();
+		drawCurves();
 	} else {
 		placeMode = "car";
 	}
@@ -285,6 +288,7 @@ UCarGenerator.prototype.onMouseDown = function () {
 	if (placeMode == "uCar") {
 		this.rotate(45);
 		redraw();
+		drawCurves();
 	} else {
 		placeMode = "uCar";
 	}
@@ -377,6 +381,8 @@ ForceGenerator.prototype.onMouseDown = function () {
 generatorList = [];
 drawItemList = [];
 menuItems = [];
+linesList = [];
+coordsList = [];
 menuX = 0;
 menuY = 0;
 ctx = null;
@@ -431,7 +437,6 @@ function mouseDragMobile (event) {
 	event.preventDefault();
 	if (placeMode == "rotating") {
 		angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
-		console.log(angle);
 		if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
 			angle = 180+angle;
 		}
@@ -443,6 +448,7 @@ function mouseDragMobile (event) {
 		// Add (event.x, event.y) to array
 	    if (mousedown) {
 	        ctx.lineTo(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+	        coordsList.push({x: event.targetTouches[0].pageX, y: event.targetTouches[0].pageY});
 	        ctx.stroke();
 	    }
 	}
@@ -462,6 +468,7 @@ function mouseDrag (event) {
 		// Add (event.x, event.y) to array
 	    if (mousedown) {
 	        ctx.lineTo(event.x, event.y);
+	        coordsList.push({x: event.x, y: event.y});
 	        ctx.stroke();
 	    }
 	}
@@ -470,8 +477,12 @@ function mouseDrag (event) {
 function mouseEnd (event) {
 	if (placeMode == "rotating") {
  		placeMode = null;
- 	}
- 	mousedown = false;
+ 		drawCurves();
+ 	} if (mousedown) {
+	 	mousedown = false;
+	 	linesList.push(coordsList);
+	 	coordsList = [];
+	 }
  }
 
 var doubleClickThreshold = 450;  //ms
@@ -498,6 +509,7 @@ function mouseDown (event) {
 		// menu is open but click was elsewhere
 		dismissMenu();
 		redraw();
+		drawCurves();
 		for (i=0;i<generatorList.length;i++) {
 			if (generatorList[i].contains(event) && generatorList[i].toString() != 'Road') {
 				if (!generatorList[i].isGenerator) {
@@ -564,6 +576,7 @@ function mouseDown (event) {
 		    mousedown = true;
 		    ctx.beginPath();
 		    ctx.moveTo(event.x, event.y);
+		    coordsList.push({x: event.x, y: event.y});
 		    break;
 		case "road":
 			tempRoad = new Road(event.x,event.y,0,0,cvs.width/15,"road",this.ctx);
@@ -601,6 +614,7 @@ function mouseDown (event) {
 			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
+			drawCurves();
 			break;
 		default:
 			break;
@@ -633,6 +647,19 @@ function redraw () {
 	
 	generatorList.forEach(function (drawItem) {
 		drawItem.draw();
+	});
+}
+
+function drawCurves () {
+	ctx.strokeStyle = '#FF0000';
+	ctx.lineWidth = cvs.width/200;
+    ctx.beginPath();
+	linesList.forEach(function (coordsArr) {
+		ctx.moveTo(coordsArr[0].x, coordsArr[0].y);
+		coordsArr.forEach(function (coord) {
+		    ctx.lineTo(coord.x, coord.y);
+	        ctx.stroke();
+		});
 	});
 }
 
