@@ -432,7 +432,7 @@ function mouseEnd (event) {
  	}
  }
 
-var doubleClickThreshold = 100;  //ms
+var doubleClickThreshold = 450;  //ms
 var lastClick = 0;
 
 function mouseDown (event) {
