@@ -428,16 +428,17 @@ function mouseEnd (event) {
 	placeMode = null;
 }
 
-var doubleClickThreshold = 400;  //ms
+var doubleClickThreshold = 100;  //ms
 var lastClick = 0;
 
 function mouseDown (event) {
 	event.preventDefault();
-	var thisClick = event.timeStamp;
+	var thisClick = new Date().getTime();
+	$('#info').text(thisClick - lastClick);
 	if (thisClick - lastClick < doubleClickThreshold) {
 		event.stopPropagation();
+		return;
 	}
-	$('#info').text(thisClick - lastClick);
 	lastClick = thisClick;
 
 	if (menuItems.length > 0) {
@@ -447,6 +448,21 @@ function mouseDown (event) {
 				return;
 			}
 		}
+		// menu is open but click was elsewhere
+		dismissMenu();
+		redraw();
+		for (i=0;i<drawItemList.length;i++) {
+			if (drawItemList[i].contains(event) && drawItemList[i].toString() != 'Road') {
+				if (!drawItemList[i].isGenerator) {
+					drawItemList[i].displayMenu(event);
+					selected = drawItemList[i];
+				} else {
+					drawItemList[i].onMouseDown();
+				}
+				return;
+			}
+		}
+		return;
 	}
 
 	for (i=0;i<drawItemList.length;i++) {
@@ -460,6 +476,7 @@ function mouseDown (event) {
 			return;
 		}
 	}
+
 	switch (placeMode) {
 		case "car":
 			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","",this.ctx);
