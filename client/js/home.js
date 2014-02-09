@@ -363,6 +363,7 @@ $(document).ready(function () {
 	canvas.addEventListener("touchmove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
+	canvas.addEventListener("touchend", mouseEnd, false);
 
 	redraw();
 });
@@ -380,6 +381,10 @@ function mouseDrag (event) {
 	}
 	selected.heading = angle;
 	redraw();
+}
+
+function mouseEnd (event) {
+	$('#info').text("!!!!!!!!!!!!!!!!!!")
 }
 
 function mouseDown (event) {
