@@ -360,11 +360,19 @@ $(document).ready(function () {
 	drawItemList.push(northGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
-	canvas.addEventListener("touchstart", mouseDown, false);
-	//canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchstart", mouseDragDown, false);
+	canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
+
+function mouseDrag (event) {
+	('#info').text(event.targetTouches[0].x+" MOVE "+event.targetTouches[0].y);
+}
+
+function mouseDragDown (event) {
+	('#info').text(event.targetTouches[0].x+" START "+event.targetTouches[0].y);
+}
 
 function mouseDown (event) {
 	event.preventDefault();
