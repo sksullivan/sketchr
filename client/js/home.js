@@ -66,9 +66,10 @@ DrawItem.prototype.displayMenu = function (event) {
 	menuY = event.y;
 	deleteItem = new MenuItem(event.x-45,event.y-40,60,30,function () {
 		drawItemList.remove(drawItemList.indexOf(selected));
-		if (primaryCars.indexOf(selected) != -1) {
-			for (i=primaryCars.indexOf(selected);i<primaryCars.length-1;i++) {
-				primaryCars[i] = primaryCars[i+1];
+		var tempIndex = primaryCars.indexOf(selected);
+		if (tempIndex != -1) {
+			primaryCars.remove(tempIndex);
+			for (i=tempIndex;i<primaryCars.length;i++) {
 				primaryCars[i].name = i+1;
 			}
 		}
@@ -141,15 +142,20 @@ function Road (x,y,x2,y2,size,name,ctx) {
 	this.size = size;
 	this.x2 = x2;
 	this.y2 = y2;
-	if (this.x2-this.x > 0) {
+	this.width = 0;
+	this.height = 0;
+	this.ctx = ctx;
+	this.name = name;
+}
+
+Road.prototype.setSize = function () {
+	if (this.x2 != this.x) {
 		this.width = Math.abs(this.x2-this.x);
 		this.height = this.size;
 	} else {
 		this.width = this.size;
 		this.height = Math.abs(this.y2-this.y);
 	}
-	this.ctx = ctx;
-	this.name = name;
 }
 
 Road.prototype.onMouseDown = function () {
@@ -181,6 +187,24 @@ Road.prototype.draw = function () {
 	ctx.setLineDash([this.size/2,this.size/4]);
 	ctx.stroke();
 	ctx.setLineDash([cvs.width+cvs.height]);
+
+	if (this.width == this.size) {
+		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
+		ctx.rotate(-Math.PI/2);
+		ctx.textAlign="end"; 
+		ctx.font="48px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText(this.name,0,-this.width/2-5);
+		ctx.rotate(Math.PI/2);
+		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
+	} else {
+		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
+		ctx.textAlign="end"; 
+		ctx.font="48px Arial";
+		ctx.fillStyle = 'black';
+		ctx.fillText(this.name,0,-this.height/2-5);
+		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
+	}
 }
 
 Road.prototype.toString = function () {
@@ -427,7 +451,7 @@ function mouseDown (event) {
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"/assets/road.png","ROAD",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,130,"EPIC ROAD",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
@@ -457,6 +481,7 @@ function mouseDown (event) {
 			tempRoad.y = y1;
 			tempRoad.x2 = x2;
 			tempRoad.y2 = y2;
+			tempRoad.setSize();
 			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
