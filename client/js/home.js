@@ -176,7 +176,7 @@ Road.prototype.draw = function () {
 	angle = -Math.atan(slope);
 	ctx.beginPath();
 	ctx.strokeStyle = '#000000';
-	ctx.lineWidth = this.size/1.5;
+	ctx.lineWidth = this.size/0.75;
 	ctx.setLineDash([cvs.width+cvs.height]);
 	ctx.moveTo(this.x-Math.cos(angle)*30, this.y+Math.sin(angle)*30);
 	ctx.lineTo(this.x2+Math.cos(angle)*30, this.y2-Math.sin(angle)*30);
@@ -531,6 +531,8 @@ function mouseDown (event) {
 
 function redraw () {
 	ctx.clearRect(0,0,cvs.width,cvs.height);
+	ctx.fillStyle = '#FFFFFF';
+	ctx.fillRect(0, 0, cvs.width, cvs.width/1600*160);
 	ctx.beginPath();
 	ctx.moveTo(0, cvs.width/1600*160);
 	ctx.lineTo(cvs.width, cvs.width/1600*160);
