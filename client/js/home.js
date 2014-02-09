@@ -360,8 +360,8 @@ $(document).ready(function () {
 	drawItemList.push(northGenerator);
 
 	canvas.addEventListener("mousedown", mouseDown, false);
-	canvas.addEventListener("touchstart", mouseDragDown, false);
-	canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchstart", mouseDown, false);
+	//canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
