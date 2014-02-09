@@ -391,15 +391,17 @@ $(document).ready(function () {
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
 	$('#info').text("Nope");
-	canvas.addEventListener("touchmove", mouseDrag, false);
+	canvas.addEventListener("touchmove", mouseDragMobile, false);
+	canvas.addEventListener("mousemove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchend", mouseEnd, false);
+	canvas.addEventListener("mouseup", mouseEnd, false);
 
 	redraw();
 });
 
-function mouseDrag (event) {
+function mouseDragMobile (event) {
 	event.preventDefault();
 	if (placeMode != "rotating") {
 		return;
@@ -425,8 +427,10 @@ function mouseDrag (event) {
 }
 
 function mouseEnd (event) {
-	// placeMode = null;
-}
+	if (placeMode == "rotating") {
+ 		placeMode = null;
+ 	}
+ }
 
 var doubleClickThreshold = 100;  //ms
 var lastClick = 0;
