@@ -402,19 +402,21 @@ $(document).ready(function () {
 	// Initialize scene and Draw Items
 	cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
-	cvs.height  = $(window).height()-20;
+	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
+	
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
 	forceGenerator = new ForceGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/force.png","",ctx);
 	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1000*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1000,"/assets/arrow.png","N",ctx);
+
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
 	generatorList.push(roadGenerator);
 	generatorList.push(forceGenerator);
 	generatorList.push(northGenerator);
-	$('#info').text("Nope");
+
 	canvas.addEventListener("touchmove", mouseDragMobile, false);
 	canvas.addEventListener("mousemove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
@@ -492,7 +494,7 @@ var mousedown = false;
 function mouseDown (event) {
 	event.preventDefault();
 	var thisClick = new Date().getTime();
-	$('#info').text(thisClick - lastClick);
+
 	if (thisClick - lastClick < doubleClickThreshold) {
 		event.stopPropagation();
 		return;
@@ -670,9 +672,9 @@ function dismissMenu () {
 }
 
 Array.prototype.remove = function (from, to) { // Remove element code snippet by John Resig, creator of jQuery
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
+	var rest = this.slice((to || from) + 1 || this.length);
+	this.length = from < 0 ? this.length + from : from;
+	return this.push.apply(this, rest);
 };
 
 function sendData () {

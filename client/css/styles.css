@@ -1,24 +1,3 @@
-.imgbar { 
-	padding-left: 50px;
-	padding-bottom: 20px;
-}
-
-img {
-	height: auto;
-	width: auto;
-	max-width: 175px;
-	max-height: 125px;
-	margin-top: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
-	vertical-align: middle;
-	cursor: pointer;
-}
-
-.isSelected {
-	box-shadow: 10px 10px 10px #FE0;
-}
-
 * { margin:0; padding:0; } /* to remove the top and left whitespace */
 
 html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
