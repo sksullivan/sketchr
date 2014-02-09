@@ -27,7 +27,7 @@ public class RecorderActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_recorder);
+		setContentView(R.layout.activity_recorder);
 
 		setButtonHandlers();
 		enableButtons(false);

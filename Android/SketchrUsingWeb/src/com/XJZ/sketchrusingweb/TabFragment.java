@@ -67,7 +67,7 @@ public class TabFragment extends Fragment {
 		
 		//WebView
 		if (index == 0) {
-			v = inflater.inflate(R.layout.fragment_web, null);
+			v = inflater.inflate(R.layout.activity_web, null);
 		
 			WebView webview = (WebView)v.findViewById(R.id.webView);
 	
@@ -89,7 +89,7 @@ public class TabFragment extends Fragment {
 			
 		//Voice Record
 		} else if (index == 2) {
-			v = inflater.inflate(R.layout.fragment_recorder, null);
+			v = inflater.inflate(R.layout.activity_recorder, null);
 			
 			((Button)v.findViewById(R.id.btnStart)).setOnClickListener(btnClick);
 			((Button)v.findViewById(R.id.btnStop)).setOnClickListener(btnClick);

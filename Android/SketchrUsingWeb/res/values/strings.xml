@@ -14,5 +14,23 @@
     <string name="action_settings">Settings</string>
     <string name="button_new">New Case</string>
     <string name="button_existing">Existing Cases</string>
-
-</resources>
+    <string name="button_voice">Record Voice</string>
+    <string name="button_sketch">Sketch</string>
+    <string name="button_camera">Camera</string>
+    <string name="placeholder">Button</string>
+    <string name="button_profile">Profile</string>
+    <string name="button_upload">Upload</string>
+    <string name="title_activity_sketch">Sketch</string>
+    <string name="title_activity_voice">Voice Recorder</string>
+    <string name="title_activity_camera">Camera</string>
+    <string name="title_activity_profile">Officer Profile</string>
+    <string name="text_username">Username</string>
+    <string name="text_password">Password</string>
+    <string name="button_login">Login</string>
+    <string name="title_activity_upload">Upload Case</string>
+    <string name="textview_sketch">Sketch</string>
+    <string name="button_view">View</string>
+    <string name="textview_voice">Voice Description</string>
+    <string name="textview_image">Image</string>
+    
+    </resources>

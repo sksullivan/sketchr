@@ -9,12 +9,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,110 +28,63 @@ public class IntroActivity extends Activity implements OnClickListener {
 	
 	Context context = this;
 	private static String uservalue;
-	static Intent i;
 	
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         
-        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.);
-        
-        //String pathToPic = "/res/drawable/chicago.jpg";
-        //Drawable pic = Drawable.createFromPath(pathToPic);
-        
         TextView titleView = (TextView)findViewById(R.id.title);
         titleView.setTextSize(40);
         
-        Button buttonNew = (Button)findViewById(R.id.btnNew);
-        //buttonNew.setBackgroundColor(color.holo_purple);
-        buttonNew.setOnClickListener(this);
+        Button btnSketch = (Button)findViewById(R.id.btnSketch);
+        btnSketch.setOnClickListener(this);
         
-        Button buttonExisting = (Button)findViewById(R.id.btnExisting);
+        Button btnVoice = (Button)findViewById(R.id.btnVoice);
+        btnVoice.setOnClickListener(this);
         
-        ImageView background = (ImageView)findViewById(R.id.background);
+        Button btnCamera = (Button)findViewById(R.id.btnCamera);
+        btnCamera.setOnClickListener(this);
         
-        titleView.bringToFront();
-        buttonNew.bringToFront();
-        buttonExisting.bringToFront();
+        Button btnProfile = (Button)findViewById(R.id.btnProfile);
+        btnProfile.setOnClickListener(this);
+        
+        Button btnUpload = (Button)findViewById(R.id.btnUpload);
+        btnUpload.setOnClickListener(this);
 	}
+
 
 	@Override
 	public void onClick(View v) {
+		Intent i;
 		
-		switch (v.getId()) {
-			case R.id.btnNew:
-				AlertDialog.Builder alert = new AlertDialog.Builder(this);
-				i = new Intent(this, MainActivity.class);
-
-				Log.i("dialog", "hello!");
+		switch(v.getId()) {
+			case R.id.btnSketch:
+				i = new Intent(this, SketchActivity.class);
 				
-				alert.setTitle("New Case");
-				alert.setMessage("Please name the case:");
-
-				// Set an EditText view to get user input
-				final EditText input = new EditText(this);
-				alert.setView(input);
-
-				alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						uservalue = input.getText().toString();	
-						i.putExtra("path", "" + uservalue);
-						Log.i("dialog", uservalue);
-						startActivity(i);
-					}
-				});
-
-				alert.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								// Canceled.
-							}
-						});
-
-				alert.show();
-				
-				/*i = new Intent(this, MainActivity.class);
-				
-				getInputViaDialog();
-
-				//addExtra onto Intent of current path
-				//startActivity(i);*/
+				startActivity(i);
 				break;
 				
-			case R.id.btnExisting:
-				//make listView of existing cases
+			case R.id.btnVoice:
+				i = new Intent(this, VoiceActivity.class);
+				startActivity(i);
+				break;
 				
-			}
-		
-	}
-	
-	private void getInputViaDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final String value;
-
-		Log.i("dialog", "hello!");
-		
-		alert.setTitle("New Case");
-		alert.setMessage("Please name the case:");
-
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				//uservalue = input.getText().toString();
+			case R.id.btnCamera:
+				i = new Intent(this, CameraActivity.class);
+				startActivity(i);
+				break;
 				
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
-
-		alert.show();
+			case R.id.btnProfile:
+				i = new Intent(this, ProfileActivity.class);
+				startActivity(i);
+				break;
+				
+			case R.id.btnUpload:
+				i = new Intent(this, UploadActivity.class);
+				
+				startActivity(i);
+				break;
+		}
+		
 	}
 }
