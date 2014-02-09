@@ -345,7 +345,7 @@ NorthGenerator.prototype.onMouseDown = function () {
 		selected = northGenerator;
 }
 
-// North Arrow Generator
+// Force Lines Generator
 
 function ForceGenerator (x,y,heading,size,imageName,name,ctx) {
 	this.x = x;
@@ -406,6 +406,7 @@ $(document).ready(function () {
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
 	generatorList.push(roadGenerator);
+	generatorList.push(forceGenerator);
 	generatorList.push(northGenerator);
 	$('#info').text("Nope");
 	canvas.addEventListener("touchmove", mouseDragMobile, false);
