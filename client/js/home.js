@@ -20,14 +20,11 @@ function DrawItem (x,y,heading,size,imageName,name,ctx) {
 }
 
 DrawItem.prototype.draw = function () {
-	ctx.save();
-	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
+	ctx.translate(this.x+this.size*this.image.width/2, this.y+this.size*this.image.height/2);
 	ctx.rotate(this.heading/180*Math.PI);
-	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
-	ctx.drawImage(this.image,this.x,this.y, this.size * this.image.width, this.size * this.image.height);
-	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
+	ctx.drawImage(this.image,-this.size*this.image.width/2,-this.size*this.image.height/2, this.size * this.image.width, this.size * this.image.height);
 	ctx.rotate(-this.heading/180*Math.PI);
-	ctx.restore();
+	ctx.translate(-(this.x+this.size*this.image.width/2), -(this.y+this.size*this.image.height/2));
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.font="13px Arial";
 	ctx.fillStyle = 'white';
@@ -431,7 +428,7 @@ function mouseDown (event) {
 			tempRoad.y = y1;
 			tempRoad.x2 = x2;
 			tempRoad.y2 = y2;
-			drawItemList.push(tempRoad);
+			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
 			break;
