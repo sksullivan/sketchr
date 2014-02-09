@@ -93,6 +93,7 @@ DrawItem.prototype.displayMenu = function (event) {
 	moveItem = new MenuItem(event.x+45,event.y-40,60,30,function () {
 		placeMode = "rotating";
 		dismissMenu();
+		redraw();
 	}, function () {
 		ctx.translate(45,-40);
 		ctx.beginPath();
@@ -159,7 +160,7 @@ Road.prototype.setSize = function () {
 }
 
 Road.prototype.onMouseDown = function () {
-	$('#info').text("pressed2");
+	
 }
 
 Road.prototype.contains = function (event) {
@@ -395,16 +396,6 @@ $(document).ready(function () {
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchend", mouseEnd, false);
 
-	var doubleClickThreshold = 50;  //ms
-	var lastClick = 0;
-
-	/*$node = ("#canvas");
-	$node.click(function(){
-		var thisClick = new Date().getTime();
-		var isDoubleClick = thisClick - lastClick < doubleClickThreshold;
-		lastClick = thisClick;
-	});*/
-
 	redraw();
 });
 
@@ -415,7 +406,6 @@ function mouseDrag (event) {
 	};
 	angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
 	console.log(angle);
-	$('#info').text("_____")
 	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
 		angle = 180+angle;
 	}
@@ -423,12 +413,32 @@ function mouseDrag (event) {
 	redraw();
 }
 
+function mouseDrag (event) {
+	if (placeMode == "rotating") {
+		angle = Math.atan((event.y-(selected.y+selected.height/2))/(event.x-(selected.x+selected.width/2)))/Math.PI*180;
+		if (event.x < selected.x+selected.width/2) {
+			angle = 180+angle;
+		}
+		selected.heading = angle;
+		redraw();
+	}
+}
+
 function mouseEnd (event) {
 	placeMode = null;
 }
 
+var doubleClickThreshold = 400;  //ms
+var lastClick = 0;
+
 function mouseDown (event) {
 	event.preventDefault();
+	var thisClick = event.timeStamp;
+	if (thisClick - lastClick < doubleClickThreshold) {
+		event.stopPropagation();
+	}
+	lastClick = thisClick;
+
 	if (menuItems.length > 0) {
 		for (i=0;i<menuItems.length;i++) {
 			if (menuItems[i].contains(event)) {
@@ -461,7 +471,7 @@ function mouseDown (event) {
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"EPIC ROAD",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,130,"road",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
