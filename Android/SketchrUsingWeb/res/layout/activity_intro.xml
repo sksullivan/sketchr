@@ -2,15 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:visibility="visible" >
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/chicagobig" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="56dp"
+        android:layout_toLeftOf="@+id/button1"
         android:text="@string/app_name" />
 
     <Button
@@ -19,8 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="138dp"
-        android:text="@string/button_new" />
+        android:layout_marginTop="176dp"
+        android:text="@string/button_new"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btnExisting"
@@ -28,7 +38,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnNew"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="14dp"
         android:text="@string/button_existing" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnExisting"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="Button" />
 
 </RelativeLayout>
