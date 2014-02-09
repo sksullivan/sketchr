@@ -398,14 +398,14 @@ $(document).ready(function () {
 	canvas.addEventListener("touchend", mouseEnd, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 
-	var doubleClickThreshold = 50;  //ms
+	/*var doubleClickThreshold = 50;  //ms
 	var lastClick = 0;
 
 	$(document).click(function(){
 		var thisClick = new Date().getTime();
 		var isDoubleClick = thisClick - lastClick < doubleClickThreshold;
 		lastClick = thisClick;
-	});
+	});*/
 
 	redraw();
 });
