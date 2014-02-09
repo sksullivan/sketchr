@@ -27,15 +27,11 @@ DrawItem.prototype.draw = function () {
 	ctx.translate(-(this.x+this.size*this.image.width/2), -(this.y+this.size*this.image.height/2));
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.font="48px Arial";
-	if (this.name == "N") {
-		ctx.fillStyle = 'black';
-	} else {
-		ctx.fillStyle = 'white';
-	}
-	ctx.fillText(this.name,-this.image.width/20,this.image.height/6);
+	ctx.fillStyle = 'white';
+	ctx.fillText(this.name,-this.image.width/4,this.image.height*1.2);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
-
+ 	
 DrawItem.prototype.contains = function (event) {
 	if (event.targetTouches) {
 		event.x = event.targetTouches[0].pageX;
@@ -228,7 +224,7 @@ Generator.prototype.isGenerator = function () {
 
 // CarGenerator Class
 
-function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
+function CarGenerator (x,y,heading,size,imageName,name,ctx) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -245,7 +241,6 @@ function CarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	}
 	this.name = name;
 	this.ctx = ctx;
-	this.type = type;
 }
 
 CarGenerator.prototype = new Generator();
@@ -261,7 +256,7 @@ CarGenerator.prototype.onMouseDown = function () {
 
 // UninvolvedCarGenerator Class
 
-function UCarGenerator (x,y,heading,size,imageName,name,ctx,type) {
+function UCarGenerator (x,y,heading,size,imageName,name,ctx) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -278,7 +273,6 @@ function UCarGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	}
 	this.name = name;
 	this.ctx = ctx;
-	this.type = type;
 }
 
 UCarGenerator.prototype = new Generator();
@@ -294,7 +288,7 @@ UCarGenerator.prototype.onMouseDown = function () {
 
 // Road Generator Class
 
-function RoadGenerator (x,y,heading,size,imageName,name,ctx,type) {
+function RoadGenerator (x,y,heading,size,imageName,name,ctx) {
 	this.x = x;
 	this.y = y;
 	this.size = size;
@@ -311,7 +305,6 @@ function RoadGenerator (x,y,heading,size,imageName,name,ctx,type) {
 	}
 	this.name = name;
 	this.ctx = ctx;
-	this.type = type;
 }
 
 RoadGenerator.prototype = new Generator();
@@ -327,13 +320,15 @@ function NorthGenerator (x,y,heading,size,imageName,name,ctx) {
 	this.y = y;
 	this.size = size;
 	this.heading = heading; // In degrees
-	this.image = new Image();
-	this.image.src = imageName;
-	this.image.owner = this;
-	this.image.onload = function () {
-		this.owner.draw();
-		this.owner.width = this.width;
-		this.owner.height = this.height;
+	if (imageName != null) {
+		this.image = new Image();
+		this.image.src = imageName;
+		this.image.owner = this;
+		this.image.onload = function () {
+			this.owner.draw();
+			this.owner.width = this.width;
+			this.owner.height = this.height;
+		}
 	}
 	this.name = name;
 	this.ctx = ctx;
@@ -342,14 +337,8 @@ function NorthGenerator (x,y,heading,size,imageName,name,ctx) {
 NorthGenerator.prototype = new Generator();
 
 NorthGenerator.prototype.onMouseDown = function () {
-	if (placeMode == "arrow") {
-		this.index = (this.index+1)%4;
-		this.image.src = this.images[this.index];
-		redraw();
-	} else {
-		placeMode = "arrow";
-		console.log("changed modes");
-	}
+		placeMode = "rotating";
+		selected = northGenerator;
 }
 
 // Setup and Main code
@@ -381,7 +370,7 @@ $(document).ready(function () {
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
-	northGenerator = new NorthGenerator(7/10*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrow.png","N",ctx);
+	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1800*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1800,"/assets/arrow.png","N",ctx);
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
 	generatorList.push(roadGenerator);
@@ -393,8 +382,16 @@ $(document).ready(function () {
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchend", mouseEnd, false);
 	canvas.addEventListener("mouseup", mouseEnd, false);
-
-	redraw();
+	
+	ctx.fillStyle = '#FFFFFF';
+	ctx.fillRect(0, 0, cvs.width, cvs.width/1600*160);
+	
+	ctx.beginPath();
+	ctx.moveTo(0, cvs.width/1600*160);
+	ctx.lineTo(cvs.width, cvs.width/1600*160);
+	ctx.lineWidth = 10;
+	ctx.strokeStyle = '#000000';
+	ctx.stroke();
 });
 
 function mouseDragMobile (event) {
