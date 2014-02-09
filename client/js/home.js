@@ -358,7 +358,7 @@ $(document).ready(function () {
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
-
+	$('#info').text("SAD");
 	canvas.addEventListener("touchmove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
