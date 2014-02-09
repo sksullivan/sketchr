@@ -359,9 +359,9 @@ $(document).ready(function () {
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
 
+	canvas.addEventListener("touchmove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
-	canvas.addEventListener("touchmove", mouseDrag, false);
 
 	redraw();
 });
