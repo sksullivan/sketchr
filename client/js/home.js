@@ -348,7 +348,7 @@ $(document).ready(function () {
 	// Initialize scene and Draw Items
 	cvs = document.getElementById('canvas');
 	cvs.width  = $(window).width();
-	cvs.height  = $(window).height()-50;
+	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
@@ -358,8 +358,8 @@ $(document).ready(function () {
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
-	$('#info').text("turning on");
-	//canvas.addEventListener("mousedown", mouseDown, false);
+
+	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDragDown, false);
 	canvas.addEventListener("touchmove", mouseDrag, false);
 
@@ -368,12 +368,12 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
-	$('#info').text("MOVE ");
+	$('#info').text(event.targetTouches[0].pageX+" MOVE "+event.targetTouches[0].pageY);
 }
 
 function mouseDragDown (event) {
 	event.preventDefault();
-	$('#info').text(" START ");
+	$('#info').text(event.targetTouches[0].pageX+" START "+event.targetTouches[0].pageX);
 }
 
 function mouseDown (event) {
