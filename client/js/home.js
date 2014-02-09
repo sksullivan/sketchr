@@ -425,7 +425,7 @@ function mouseDrag (event) {
 }
 
 function mouseEnd (event) {
-	placeMode = null;
+	// placeMode = null;
 }
 
 var doubleClickThreshold = 100;  //ms
