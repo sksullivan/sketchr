@@ -398,8 +398,7 @@ $(document).ready(function () {
 	var doubleClickThreshold = 50;  //ms
 	var lastClick = 0;
 
-	$node = ("#canvas");
-	$node.click(function(){
+	$(document).click(function(){
 		var thisClick = new Date().getTime();
 		var isDoubleClick = thisClick - lastClick < doubleClickThreshold;
 		lastClick = thisClick;
