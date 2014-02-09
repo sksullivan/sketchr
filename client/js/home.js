@@ -84,7 +84,8 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	moveItem = new MenuItem(event.x+45,event.y-40,60,30,function () {
-		moving = selected;
+		placeMode = moving;
+		dismissMenu();
 	}, function () {
 		ctx.translate(45,-40);
 		ctx.beginPath();
@@ -96,7 +97,7 @@ DrawItem.prototype.displayMenu = function (event) {
 		ctx.stroke();
 		ctx.font="12px Arial";
 		ctx.fillStyle = 'black';
-		ctx.fillText("Move",10,20);
+		ctx.fillText("Rotate",10,20);
 		ctx.translate(-45,40);
 	});
 
@@ -368,8 +369,14 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
+	if (placeMode != moving) {
+		return;
+	};
 	angle = Math.atan((event.targetTouches[0].pageY-selected.y+selected.height/2)/(event.targetTouches[0].pageX-selected.x+selected.width/2))/Math.PI*180;
 	console.log(angle);
+	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
+		angle = -angle;
+	}
 	selected.heading = angle;
 	redraw();
 }
