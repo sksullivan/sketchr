@@ -358,7 +358,7 @@ $(document).ready(function () {
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
-	$('#info').text("SAD");
+	$('#info').text("Nope");
 	canvas.addEventListener("touchmove", mouseDrag, false);
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
@@ -368,7 +368,8 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
-	$('#info').text(event.targetTouches[0].pageX+" MOVE "+event.targetTouches[0].pageY);
+	selected.heading = Math.atan(event.targetTouches[0].pageY/event.targetTouches[0].pageX)/Math.PI*180;
+	redraw();
 }
 
 function mouseDown (event) {
