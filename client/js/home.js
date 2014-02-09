@@ -84,7 +84,7 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	moveItem = new MenuItem(event.x+45,event.y-40,60,30,function () {
-		placeMode = moving;
+		placeMode = "rotating";
 		dismissMenu();
 	}, function () {
 		ctx.translate(45,-40);
@@ -369,7 +369,7 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
-	if (placeMode != moving) {
+	if (placeMode != "rotating") {
 		return;
 	};
 	angle = Math.atan((event.targetTouches[0].pageY-selected.y+selected.height/2)/(event.targetTouches[0].pageX-selected.x+selected.width/2))/Math.PI*180;
