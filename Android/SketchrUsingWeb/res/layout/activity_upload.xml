@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="74dp"
+        android:text="@string/textview_sketch"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnViewSketch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textView1"
+        android:layout_alignBottom="@id/textView1"
+        android:layout_marginLeft="25dp"
+        android:layout_toRightOf="@id/textView1"
+        android:text="@string/button_view" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnViewSketch"
+        android:layout_marginTop="25dp"
+        android:layout_toLeftOf="@id/btnViewSketch"
+        android:text="@string/textview_voice"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnViewVoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/btnViewSketch"
+        android:layout_alignTop="@id/textView2"
+        android:text="@string/button_view" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/textView2"
+        android:layout_below="@id/btnViewVoice"
+        android:layout_marginTop="22dp"
+        android:text="@string/textview_image"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnViewImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textView3"
+        android:layout_alignBottom="@id/textView3"
+        android:layout_alignRight="@id/btnViewVoice"
+        android:text="@string/button_view" />
+
+</RelativeLayout>

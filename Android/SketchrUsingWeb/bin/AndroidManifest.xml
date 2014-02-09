@@ -26,24 +26,81 @@
         <activity
             android:name="com.XJZ.sketchrusingweb.IntroActivity"
             android:label="@string/app_name" 
-            android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.NoActionBar"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name="com.XJZ.sketchrusingweb.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
+        
         <activity
             android:name="com.XJZ.sketchrusingweb.HelpView"
-            android:label="Help" >
+            android:label="Help"
+            android:screenOrientation="portrait" >
         </activity>
+        
         <activity
             android:name="com.XJZ.sketchrusingweb.SendActivity"
             android:label="@string/title_activity_send"
-            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity" >
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.XJZ.sketchrusingweb.MainActivity" />
+        </activity>
+        
+        <activity
+            android:name="com.XJZ.sketchrusingweb.SketchActivity"
+            android:label="@string/title_activity_sketch"
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.XJZ.sketchrusingweb.MainActivity" />
+        </activity>
+        
+        <activity
+            android:name="com.XJZ.sketchrusingweb.VoiceActivity"
+            android:label="@string/title_activity_voice"
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.XJZ.sketchrusingweb.MainActivity" />
+        </activity>
+        
+        <activity
+            android:name="com.XJZ.sketchrusingweb.CameraActivity"
+            android:label="@string/title_activity_camera"
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.XJZ.sketchrusingweb.MainActivity" />
+        </activity>
+        
+        <activity
+            android:name="com.XJZ.sketchrusingweb.ProfileActivity"
+            android:label="@string/title_activity_camera"
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.XJZ.sketchrusingweb.MainActivity" />
+        </activity>
+        
+        <activity
+            android:name="com.XJZ.sketchrusingweb.UploadActivity"
+            android:label="@string/title_activity_upload"
+            android:parentActivityName="com.XJZ.sketchrusingweb.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.XJZ.sketchrusingweb.MainActivity" />
