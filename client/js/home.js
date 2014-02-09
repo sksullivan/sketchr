@@ -359,7 +359,7 @@ $(document).ready(function () {
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
 
-	canvas.addEventListener("mousedown", mouseDown, false);
+	//canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDragDown, false);
 	canvas.addEventListener("touchmove", mouseDrag, false);
 
