@@ -374,6 +374,7 @@ function mouseDrag (event) {
 	};
 	angle = Math.atan((event.targetTouches[0].pageY-(selected.y+selected.height/2))/(event.targetTouches[0].pageX-(selected.x+selected.width/2)))/Math.PI*180;
 	console.log(angle);
+	$('#info').text("_____")
 	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
 		$('#info').text("!!!!!");
 	}
