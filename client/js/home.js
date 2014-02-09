@@ -28,7 +28,7 @@ DrawItem.prototype.draw = function () {
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
 	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
-	ctx.fillText(this.name,-35,+5);
+	ctx.fillText(this.name,-this.image.width/20,this.image.height/6);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
 
@@ -110,7 +110,7 @@ DrawItem.prototype.displayMenu = function (event) {
 	});
 
 	labelItem = new MenuItem(event.x,event.y+5,60,30,function () {
-		label = prompt("Enter a name.");
+		label = prompt("Enter a new name");
 		selected.name = label;
 		dismissMenu();
 		redraw();
@@ -522,6 +522,7 @@ function mouseDown (event) {
 			tempRoad.x2 = x2;
 			tempRoad.y2 = y2;
 			tempRoad.setSize();
+			tempRoad.name = prompt("Enter the street name");
 			drawItemList.unshift(tempRoad);
 			placeMode = "road";
 			redraw();
