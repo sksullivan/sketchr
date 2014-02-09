@@ -376,6 +376,39 @@ ForceGenerator.prototype.onMouseDown = function () {
 	placeMode = "force";
 }
 
+// ObstacleGenerator Class
+
+function ObstacleGenerator (x,y,heading,size,imageName,name,ctx) {
+	this.x = x;
+	this.y = y;
+	this.size = size;
+	this.heading = heading; // In degrees
+	if (imageName != null) {
+		this.image = new Image();
+		this.image.src = imageName;
+		this.image.owner = this;
+		this.image.onload = function () {
+			this.owner.draw();
+			this.owner.width = this.width;
+			this.owner.height = this.height;
+		}
+	}
+	this.name = name;
+	this.ctx = ctx;
+}
+
+ObstacleGenerator.prototype = new Generator();
+
+ObstacleGenerator.prototype.onMouseDown = function () {
+	if (placeMode == "obstacle") {
+		this.rotate(45);
+		redraw();
+		drawCurves();
+	} else {
+		placeMode = "obstacle";
+	}
+}
+
 // Setup and Main code
 
 generatorList = [];
@@ -404,16 +437,18 @@ $(document).ready(function () {
 	cvs.width  = $(window).width();
 	cvs.height  = $(window).height();
 	ctx = document.getElementById('canvas').getContext('2d');
-	
+
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
-	forceGenerator = new ForceGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/force.png","",ctx);
+	obstacleGenerator = new ObstacleGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/obstacle.png","",ctx);
+	forceGenerator = new ForceGenerator(1/2*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/force.png","",ctx);
 	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1000*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1000,"/assets/arrow.png","N",ctx);
 
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
 	generatorList.push(roadGenerator);
+	generatorList.push(obstacleGenerator);
 	generatorList.push(forceGenerator);
 	generatorList.push(northGenerator);
 
@@ -580,6 +615,10 @@ function mouseDown (event) {
 		    ctx.moveTo(event.x, event.y);
 		    coordsList.push({x: event.x, y: event.y});
 		    break;
+	   	case "obstacle":
+	   		obst = new DrawItem(event.x-obstacleGenerator.size*obstacleGenerator.width/2,event.y-obstacleGenerator.size*obstacleGenerator.height/2,obstacleGenerator.heading,obstacleGenerator.size,"/assets/obstacle.png","",this.ctx);
+			drawItemList.push(obst);
+	   		break; 
 		case "road":
 			tempRoad = new Road(event.x,event.y,0,0,cvs.width/15,"road",this.ctx);
 			placeMode = "road2";
