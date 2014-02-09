@@ -26,9 +26,9 @@ DrawItem.prototype.draw = function () {
 	ctx.rotate(-this.heading/180*Math.PI);
 	ctx.translate(-(this.x+this.size*this.image.width/2), -(this.y+this.size*this.image.height/2));
 	ctx.translate(this.x+this.image.width/2, this.y+this.image.height/2);
-	ctx.font="13px Arial";
+	ctx.font="48px Arial";
 	ctx.fillStyle = 'white';
-	ctx.fillText(this.name,-50,0);
+	ctx.fillText(this.name,-35,+5);
 	ctx.translate(-(this.x+this.image.width/2), -(this.y+this.image.height/2));
 }
 
@@ -66,6 +66,12 @@ DrawItem.prototype.displayMenu = function (event) {
 	menuY = event.y;
 	deleteItem = new MenuItem(event.x-45,event.y-40,60,30,function () {
 		drawItemList.remove(drawItemList.indexOf(selected));
+		if (primaryCars.indexOf(selected) != -1) {
+			for (i=primaryCars.indexOf(selected);i<primaryCars.length-1;i++) {
+				primaryCars[i] = primaryCars[i+1];
+				primaryCars[i].name = i+1;
+			}
+		}
 		dismissMenu();
 		redraw();
 	}, function () {
@@ -384,7 +390,7 @@ function mouseDrag (event) {
 }
 
 function mouseEnd (event) {
-	$('#info').text("!!!!!!!!!!!!!!!!!!")
+	placeMode = null;
 }
 
 function mouseDown (event) {
@@ -411,15 +417,17 @@ function mouseDown (event) {
 	}
 	switch (placeMode) {
 		case "car":
-			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","a normal car",this.ctx);
+			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","",this.ctx);
 			drawItemList.push(car);
+			primaryCars.push(car);
+			car.name = primaryCars.indexOf(car)+1
 			break;
 		case "uCar":
-			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","the car",this.ctx);
+			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","",this.ctx);
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"/assets/road.png","the road",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,130,"/assets/road.png","ROAD",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
