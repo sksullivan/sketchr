@@ -345,6 +345,33 @@ NorthGenerator.prototype.onMouseDown = function () {
 		selected = northGenerator;
 }
 
+// North Arrow Generator
+
+function ForceGenerator (x,y,heading,size,imageName,name,ctx) {
+	this.x = x;
+	this.y = y;
+	this.size = size;
+	this.heading = heading; // In degrees
+	if (imageName != null) {
+		this.image = new Image();
+		this.image.src = imageName;
+		this.image.owner = this;
+		this.image.onload = function () {
+			this.owner.draw();
+			this.owner.width = this.width;
+			this.owner.height = this.height;
+		}
+	}
+	this.name = name;
+	this.ctx = ctx;
+}
+
+ForceGenerator.prototype = new Generator();
+
+ForceGenerator.prototype.onMouseDown = function () {
+		placeMode = "force";
+}
+
 // Setup and Main code
 
 generatorList = [];
@@ -374,6 +401,7 @@ $(document).ready(function () {
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
+	forceGenerator = new ForceGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/force.png","",ctx);
 	northGenerator = new NorthGenerator(cvs.width-2*cvs.width/1800*76,cvs.width/1600*160+0.5*cvs.width/1800*72,0,cvs.width/1800,"/assets/arrow.png","N",ctx);
 	generatorList.push(carGenerator);
 	generatorList.push(uCarGenerator);
