@@ -384,7 +384,7 @@ $(document).ready(function () {
 	carGenerator = new CarGenerator(1/85*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/redcar.png","",ctx);
 	uCarGenerator = new UCarGenerator(1/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/graycar.png","",ctx);
 	roadGenerator = new RoadGenerator(2/7*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/road.png","",ctx);
-	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrowU.png","",ctx);
+	northGenerator = new NorthGenerator(11/28*cvs.width,1/60*cvs.height,0,cvs.width/1800,"/assets/arrowU.png","asdf",ctx);
 	drawItemList.push(carGenerator);
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
@@ -394,15 +394,6 @@ $(document).ready(function () {
 	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDown, false);
 	canvas.addEventListener("touchend", mouseEnd, false);
-
-	var doubleClickThreshold = 50;  //ms
-	var lastClick = 0;
-
-	$(document).click(function(){
-		var thisClick = new Date().getTime();
-		var isDoubleClick = thisClick - lastClick < doubleClickThreshold;
-		lastClick = thisClick;
-	});
 
 	redraw();
 });
@@ -426,8 +417,17 @@ function mouseEnd (event) {
 	placeMode = null;
 }
 
+var doubleClickThreshold = 400;  //ms
+var lastClick = 0;
+
 function mouseDown (event) {
 	event.preventDefault();
+	var thisClick = event.timeStamp;
+	if (thisClick - lastClick < doubleClickThreshold) {
+		event.stopPropagation();
+	}
+	lastClick = thisClick;
+
 	if (menuItems.length > 0) {
 		for (i=0;i<menuItems.length;i++) {
 			if (menuItems[i].contains(event)) {
