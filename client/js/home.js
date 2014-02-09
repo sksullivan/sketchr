@@ -368,7 +368,9 @@ $(document).ready(function () {
 
 function mouseDrag (event) {
 	event.preventDefault();
-	selected.heading = Math.atan(event.targetTouches[0].pageY/event.targetTouches[0].pageX)/Math.PI*180;
+	angle = Math.atan((event.targetTouches[0].pageY-selected.y+selected.height/2)/(event.targetTouches[0].pageX-selected.x+selected.width/2))/Math.PI*180;
+	console.log(angle);
+	selected.heading = angle;
 	redraw();
 }
 
