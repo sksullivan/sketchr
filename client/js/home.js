@@ -375,7 +375,7 @@ function mouseDrag (event) {
 	angle = Math.atan((event.targetTouches[0].pageY-selected.y+selected.height/2)/(event.targetTouches[0].pageX-selected.x+selected.width/2))/Math.PI*180;
 	console.log(angle);
 	if (event.targetTouches[0].pageX < selected.x+selected.width/2) {
-		angle = -angle;
+		//angle = -angle;
 	}
 	selected.heading = angle;
 	redraw();
