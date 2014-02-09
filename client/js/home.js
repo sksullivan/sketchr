@@ -428,7 +428,7 @@ function mouseEnd (event) {
 	// placeMode = null;
 }
 
-var doubleClickThreshold = 100;  //ms
+var doubleClickThreshold = 500;  //ms
 var lastClick = 0;
 
 function mouseDown (event) {
