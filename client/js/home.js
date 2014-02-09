@@ -168,7 +168,7 @@ Road.prototype.contains = function (event) {
 		event.x = event.targetTouches[0].pageX;
 		event.y = event.targetTouches[0].pageY;
 	}
-	return event.y < this.y+this.height/2 && event.y > this.y-this.height/2 && event.x < this.x+this.width/2 && event.x > this.x-this.width/2;
+	return event.y < this.y+this.height/2 + 500/cvs.height && event.y > this.y-this.height/2 - 500/cvs.height && event.x < this.x+this.width/2 + 200/cvs.width && event.x > this.x-this.width/2 - 200/cvs.width;
 }
 
 Road.prototype.draw = function () {
@@ -192,18 +192,16 @@ Road.prototype.draw = function () {
 	if (this.width == this.size) {
 		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
 		ctx.rotate(-Math.PI/2);
-		ctx.textAlign="end"; 
 		ctx.font="48px Arial";
-		ctx.fillStyle = 'black';
-		ctx.fillText(this.name,0,-this.width/2-5);
+		ctx.fillStyle = 'white';
+		ctx.fillText(this.name,-this.height/2,-this.width/1.25);
 		ctx.rotate(Math.PI/2);
 		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
 	} else {
 		ctx.translate((this.x2+this.x)/2,(this.y2+this.y)/2);
-		ctx.textAlign="end"; 
 		ctx.font="48px Arial";
-		ctx.fillStyle = 'black';
-		ctx.fillText(this.name,0,-this.height/2-5);
+		ctx.fillStyle = 'white';
+		ctx.fillText(this.name,-this.width/2,-this.height/1.25);
 		ctx.translate(-(this.x2+this.x)/2,-(this.y2+this.y)/2);
 	}
 }
@@ -486,14 +484,14 @@ function mouseDown (event) {
 			car = new DrawItem(event.x-carGenerator.size*carGenerator.width/2,event.y-carGenerator.size*carGenerator.height/2,carGenerator.heading,carGenerator.size,"/assets/redcar.png","",this.ctx);
 			drawItemList.push(car);
 			primaryCars.push(car);
-			car.name = primaryCars.indexOf(car)+1
+			car.name = primaryCars.indexOf(car)+1;
 			break;
 		case "uCar":
 			uCar = new DrawItem(event.x-uCarGenerator.size*uCarGenerator.width/2,event.y-uCarGenerator.size*uCarGenerator.height/2,uCarGenerator.heading,uCarGenerator.size,"/assets/graycar.png","",this.ctx);
 			drawItemList.push(uCar);
 			break;
 		case "road":
-			tempRoad = new Road(event.x,event.y,0,0,130,"road",this.ctx);
+			tempRoad = new Road(event.x,event.y,0,0,cvs.width/15,"road",this.ctx);
 			placeMode = "road2";
 			break;
 		case "road2":
