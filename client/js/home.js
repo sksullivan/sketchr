@@ -358,7 +358,7 @@ $(document).ready(function () {
 	drawItemList.push(uCarGenerator);
 	drawItemList.push(roadGenerator);
 	drawItemList.push(northGenerator);
-
+	$('#info').text("SEXY ");
 	//canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("touchstart", mouseDragDown, false);
 	canvas.addEventListener("touchmove", mouseDrag, false);
